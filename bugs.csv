@@ -1,0 +1,103 @@
+Bug ID,Tiket,Module,Title,Steps to Reproduce,Expected Result,Actual Result,Severity,Priority,Reporter,Status,Date Found,Video Evidence,Screenshot Evidence
+BUG-001,Tiket 1 - Capaian Multi Select,Tahfidz (Tambah Riwayat),"Program Jenis Juz: step Pilih Surah hilang setelah 1 surah dicentang, surat kedua tidak bisa dipilih","1. Login sebagai admin
+2. Buka Kesiswaan > Tahfidz > Detail PRG-A (QAAUTO Juz Ayat) > Detail Siswa Aisyah Safitri
+3. Klik Tambah Riwayat
+4. Centang Juz 16
+5. Centang halaman yang memuat akhir Maryam dan awal Taha (Juz 16 - Halaman 11)
+6. Buka dropdown Pilih Surat
+7. Centang Maryam dan Taha","Pilih Surah tetap tampil sebagai dropdown pilihan jamak beserta chip. Taha dapat dicentang sebagai surat kedua, chip surat dapat dilepas, dan Daftar Ayat menampilkan kelompok Maryam dan Taha (DoD: Pilih Surat dapat dicentang lebih dari satu; TC-011).","Begitu 1 surah dicentang, seluruh step Pilih Surah (label, dropdown, chip) hilang dari DOM. Surat kedua tidak bisa dipilih dan surah terpilih tidak bisa dilepas tanpa menutup modal. Penyebab di source origin/staging: TahfidzUnit::surahOptions() untuk Jenis Juz memakai ayatScope($chosen) yang ikut menyaring berdasarkan surah yang SUDAH dipilih, sehingga opsi tinggal 1, lalu MemberDetail::buildUnitOptions() menganggapnya 'pilihan tinggal satu' -> dipilih otomatis dan langkah disembunyikan. Program Jenis Surah tidak terdampak. Pola kedua (Cypress run 6 Okt 2026, TC-018): bila halaman pertama yang dipilih hanya memuat 1 surat (Juz 30 hal. 582 = An-Naba'), surat itu dipilih otomatis; menambah halaman lain yang memuat banyak surat (hal. 604) TIDAK memunculkan step Pilih Surah lagi karena opsi tetap tersaring oleh surat terpilih otomatis. Retest 6 Oktober 2026 setelah deploy staging commit 2a2a430e: TC-011 PASS (sudah diperbaiki).",High,P01,Fajar Ardiansyah,Fixed,6 Oktober 2026,,docs/evidence/BUG-001/README.md
+BUG-002,Tiket 1 - Capaian Multi Select,Tahfidz (Tambah Riwayat),Popup Ganti Pilihan > Batal: checkbox juz/halaman tetap tidak tercentang padahal pilihan tidak berubah,"1. Login sebagai admin
+2. Buka Kesiswaan > Tahfidz > Detail PRG-A (QAAUTO Juz Ayat) > Detail Siswa Aisyah Safitri
+3. Klik Tambah Riwayat
+4. Centang Juz 16 dan Juz 30
+5. Centang halaman Juz 16 yang memuat Taha dan 1 halaman Juz 30
+6. Centang Taha, lalu centang 1 ayat Taha
+7. Lepas centang Juz 16
+8. Klik Batal
+9. Buka dropdown Pilih Juz","Juz 16 tetap tercentang di dropdown karena pilihan kembali ke nilai semula (PRD: 'Ketika admin memilih Batal, pilihan kembali ke nilai semula'; TC-026).","Chip Juz 16 masih tampil dan ayat terpilih utuh (state server tidak berubah), tetapi checkbox Juz 16 di dropdown tetap tidak tercentang sampai dropdown di-render ulang. Tampilan tidak sesuai state; klik berikutnya pada checkbox itu justru dianggap melepas lagi.",Medium,P02,Fajar Ardiansyah,Open,6 Oktober 2026,,docs/evidence/BUG-002/TC-026_Tahfidz_-_Capaian_Multi_Select_-_Pilih_Ayat_--_Lepas_pilihan_--_TC-026_Popup_Ganti_Pilihan_Batal_mempertahankan_juz_dan_ayat_failed_.png
+BUG-003,Di luar tiket,Tahfidz (List Program),Data office termasuk field berbentuk hash password bocor ke HTML list program tahfidz,"1. Login sebagai admin
+2. Buka Kesiswaan > Tahfidz
+3. Inspect tombol Aksi > Edit dan Aksi > Hapus pada salah satu program
+4. Periksa atribut wire:click","Atribut tombol hanya memuat data yang dibutuhkan form Edit/Hapus (id dan field program). Data office/instansi, terutama field sensitif, tidak dikirim ke browser.","Setiap baris memuat sekitar 8.500 karakter JSON berisi seluruh objek program PLUS objek office lengkap, termasuk field berbentuk hash bcrypt, main_user_id, dan end_date_support_access (10 baris sekitar 170 KB). Source origin/staging resources/views/student-affairs/tahfidz/table-row.blade.php baris 86 (json_encode($row->toArray())) dan 89 ({{ $row }}). Relasi offices ikut ter-serialize karena model App\Models\Office tidak punya $hidden.",High,P03,Fajar Ardiansyah,Open,6 Oktober 2026,,docs/evidence/BUG-003/README.md
+BUG-004,Tiket 1 - Capaian Multi Select,Tahfidz (Tambah Riwayat),"Daftar Ayat tidak dimuat otomatis saat digulir, lanjutan hanya lewat tombol Muat ayat berikutnya","1. Login sebagai admin
+2. Buka Kesiswaan > Tahfidz > Detail PRG-SA (QAAUTO Surah Ayat) > Detail Siswa Aisyah Safitri
+3. Klik Tambah Riwayat
+4. Centang Taha
+5. Gulir Daftar Ayat mendekati kelompok ayat berikutnya","Kelompok ayat berikutnya dimuat otomatis ketika admin menggulir mendekatinya, dengan indikator memuat per kelompok (PRD Tambah Riwayat Progress Siswa; DoD Cards School; TC-031).","Daftar hanya merender 60 ayat per surat (badge tetap menyebut total, misal 135 ayat). Menggulir sampai dasar tidak memuat apa pun; lanjutan hanya lewat klik tombol Muat ayat berikutnya (wire:click showMoreUnits). Fungsi tetap bisa dipakai lewat tombol, jadi dampaknya UX saja. Terkonfirmasi element analysis #2 dan Cypress run 6 Okt 2026.",Low,P04,Fajar Ardiansyah,Open,6 Oktober 2026,,docs/evidence/BUG-004/TC-031_Tahfidz_-_Capaian_Multi_Select_-_Pilih_Ayat_--_Daftar_Ayat_--_TC-031_Daftar_Ayat_dimuat_bertahap_saat_digulir_failed_.png
+BUG-005,Tiket 1 - Capaian Multi Select,Tahfidz (Detail Siswa / Export),Penulisan Capaian Hafalan tidak sesuai PRD: tanpa prefix 'QS.' dan kata 'Ayat' berhuruf kapital,"1. Login sebagai admin
+2. Buka Kesiswaan > Tahfidz > Detail PRG-SA (QAAUTO Surah Ayat) > Detail Siswa Aisyah Safitri
+3. Klik Tambah Riwayat
+4. Centang Maryam dan Taha
+5. Centang Maryam Ayat 1-5 dan Taha Ayat 1, 2, 3, 7, 10, klik Simpan
+6. Periksa kolom Capaian Hafalan
+7. Klik Excel
+8. Periksa kolom Capaian Hafalan pada file export","Ditulis per surat sesuai PRD Detail Siswa: QS. Maryam ayat 1-5, QS. Taha ayat 1-3, 7, 10 (keputusan user Q2 6 Okt 2026: ikut PRD). Berlaku pada list, export, dan notifikasi.","List dan export menulis 'Maryam Ayat 1-5, Taha Ayat 1-3, 7, 10' (tanpa 'QS.', 'Ayat' kapital). Riwayat 4 surat: 'An-Naba' Ayat 1-2, An-Nazi'at Ayat 1-2, 'Abasa Ayat 1-2, At-Takwir Ayat 1-2'. Aturan rentang, koma, urutan mushaf, dan '+n surat' sudah benar. Source: TahfidzUnit::formatAyatParts() menyusun surahName . ' Ayat ' . compactNumbers. Cypress run 6 Okt 2026: TC-081 s.d. TC-086, TC-090, TC-091.",Low,P05,Fajar Ardiansyah,Open,6 Oktober 2026,,docs/evidence/BUG-005/TC-081_Tahfidz_-_Capaian_Multi_Select_-_Penulisan_Capaian_--_Batas_Ayat_--_TC-081_Ayat_berurutan_ditulis_sebagai_rentang_failed_.png
+BUG-006,Tiket 1 - Capaian Multi Select,Tahfidz (Tambah Riwayat),Popup Ganti Pilihan muncul walau tidak ada ayat terpilih yang akan dihapus,"1. Login sebagai admin
+2. Buka Kesiswaan > Tahfidz > Detail PRG-A (QAAUTO Juz Ayat) > Detail Siswa Aisyah Safitri
+3. Klik Tambah Riwayat
+4. Centang Juz 16 dan Juz 30
+5. Centang halaman Juz 16 yang memuat Maryam dan 1 halaman Juz 30
+6. Centang Maryam, lalu centang Maryam Ayat 96-98
+7. Lepas centang Juz 30",Juz 30 langsung terlepas tanpa popup karena tidak ada ayat terpilih di bawahnya (PRD: popup hanya ketika sudah ada ayat yang dipilih di bawah juz/halaman yang dilepas; keputusan user Q5 6 Okt 2026).,"Popup 'Ganti Pilihan?' tetap muncul dengan pesan 'Ayat yang sudah dipilih akan dihapus ketika Anda mengganti pilihan ini. Lanjutkan?', padahal setelah Ganti tidak ada ayat yang terhapus. Pesan menyesatkan. Source: MemberDetail::toggleStepValue() hanya memeriksa unit_marked tidak kosong.",Low,P06,Fajar Ardiansyah,Open,6 Oktober 2026,,docs/evidence/BUG-006/README.md
+BUG-007,Tiket 2 - Improvement Batas Tahfidz,Tahfidz (Detail Program),"Detail program: anggota tampil '-', 0%, 'Belum ada riwayat' bila riwayat terbarunya ada di program lain","1. Login sebagai admin
+2. Buka detail anggota Aisyah Safitri pada Program A
+3. Tambah riwayat Juz 26, 27, 28, klik Simpan
+4. Buka detail anggota Aisyah Safitri pada Program D
+5. Tambah riwayat An-Naba' dan An-Nazi'at, klik Simpan
+6. Buka detail Program A
+7. Periksa kolom Batas Tahfidz, Pencapaian, dan Terakhir Update anggota Aisyah Safitri","Batas Tahfidz 'Juz 28', Pencapaian '60% (3 dari 5 juz)', Terakhir Update = tanggal riwayat (TC-IMT-095, 098)","Batas Tahfidz '-', Pencapaian '0% (0 dari 5 juz)', Terakhir Update 'Belum ada riwayat'. Penyebab: Member::latest_tahfidz_progress() = hasOne()->ofMany(activity_date,id) memilih riwayat terbaru dari SEMUA program; constraint tahfidz_id di closure eager load MemberDatatable diterapkan sesudahnya -> null. Filter (memberIdsAtUnit) ikut terdampak.",High,P01,Fajar Ardiansyah,Open,6 Oktober 2026,,docs/evidence/BUG-007/TC-IMT-095_Tahfidz_-_Edit_List_Export_Hapus_Riwayat_Batas_Tahfidz_--_TC-IMT-095_Simpan_perubahan_riwayat_failed_.png
+BUG-008,Tiket 2 - Improvement Batas Tahfidz,Tahfidz (Detail Program - Filter),Filter Batas Tahfidz di Detail program selalu HTTP 500,"1. Login sebagai admin
+2. Buka detail Program A
+3. Buka filter Batas Tahfidz, pilih Juz 28
+4. Monitor Network: POST /livewire/message/student-affairs.tahfidz.datatable.member-datatable","List anggota tersaring ke posisi terakhir = nilai filter, tingkat filter berikutnya muncul, export ikut filter (TC-IMT-057..064)",HTTP 500 untuk setiap nilai filter di semua program (2 run). Penyebab: MemberDatatable::filters()/selectedUnitKey() memanggil getFilter(); di rappasoft v1.25.1 getFilter() memanggil filters() lagi bila filter berisi nilai -> rekursi tanpa akhir. Fix: baca $this->filters['batas_'.$step] langsung.,High,P01,Fajar Ardiansyah,Open,6 Oktober 2026,,docs/evidence/BUG-008/TC-IMT-057_Tahfidz_-_Filter_Batas_Tahfidz_Detail_Program_--_TC-IMT-057_Filter_Batas_Tahfidz_pada_program_Batas_Juz_failed_.png
+BUG-009,Tiket 2 - Improvement Batas Tahfidz,Tahfidz (Riwayat Progress),Dua riwayat di tanggal sama: Pencapaian riwayat pertama ikut menghitung satuan riwayat kedua,"1. Login sebagai admin
+2. Buka detail anggota Aisyah Safitri pada Program F
+3. Tambah riwayat Halaman 582, klik Simpan
+4. Tambah riwayat Halaman 583 dengan tanggal yang sama, klik Simpan
+5. Periksa kolom Pencapaian kedua riwayat",Riwayat 1: 4.35% (1 dari 23 halaman); riwayat 2: 8.70% (2 dari 23 halaman) — kumulatif sampai riwayat itu,"Keduanya 8.70% (2 dari 23 halaman). Penyebab: TahfidzProgressRepository::recalculateProgressAfter() ikut menghitung ulang riwayat LEBIH LAMA di tanggal yang sama, dan calculateUnitTotal() memakai activity_date <= tanggal sehingga riwayat sesudahnya (tanggal sama) ikut terhitung.",Medium,P02,Fajar Ardiansyah,Open,6 Oktober 2026,,docs/evidence/BUG-009/TC-IMT-098_Tahfidz_-_Edit_List_Export_Hapus_Riwayat_Batas_Tahfidz_--_TC-IMT-098_Hapus_riwayat_menghitung_ulang_persentase_failed_.png
+BUG-010,Tiket 2 - Improvement Batas Tahfidz,Tahfidz (Riwayat Progress),Riwayat lama ikut berubah penomoran halamannya setelah metode instansi diganti,"1. Login sebagai admin
+2. Buka detail anggota Aisyah Safitri pada Program F
+3. Tambah riwayat Halaman 582 (metode instansi Halaman dimulai dari 1 pada setiap juz), klik Simpan
+4. Buka Pengaturan > Kesiswaan > Batas Tahfidz, Edit SMP Digital Indonesia+
+5. Ubah metode ke Nomor halaman mushaf, klik Simpan
+6. Buka list riwayat lama pada detail anggota Program F",Riwayat lama tetap 'Juz 30 Halaman 1' (PRD Perilaku Umum; TC-IMT-105). Dikonfirmasi bug oleh dev 6 Okt 2026 (A1).,Riwayat lama berubah jadi 'Halaman 582'. Penyebab: formatPageParts() memakai metode instansi SAAT INI; metode tidak disimpan di riwayat.,Medium,P02,Fajar Ardiansyah,Open,6 Oktober 2026,,docs/evidence/BUG-010/TC-IMT-105_Tahfidz_-_Mushaf_Madinah_Metode_Penomoran_--_TC-IMT-105_Ubah_metode_halaman_tidak_mengubah_riwayat_yang_sudah_tersimpan_failed_.png
+BUG-011,Tiket 2 - Improvement Batas Tahfidz,Tahfidz (Tambah/Edit Program),Ganti Jenis Tahfidz: Batas diganti default instansi (bukan Surah) dan keterangan 'disesuaikan' tidak tampil,"1. Login sebagai admin
+2. Buka Kesiswaan > Tahfidz, klik Tambah Tahfidz
+3. Pilih Instansi SMP Digital Indonesia+
+4. Pilih Jenis Juz dan Batas Halaman
+5. Ganti Jenis ke Surah",Batas Tahfidz = Surah dan tampil 'Pilihan Batas Tahfidz disesuaikan karena Jenis Tahfidz diubah.' (TC-IMT-032). Dikonfirmasi bug oleh dev 6 Okt 2026 (A3).,"Batas berubah ke Ayat (default instansi), keterangan tidak tampil. Penyebab: Index::updatedTahfidzType() memakai defaultLimit(); flash 'info' tidak dirender x-alert.notification (hanya success/error/session_expired).",Low,P03,Fajar Ardiansyah,Open,6 Oktober 2026,,docs/evidence/BUG-011/TC-IMT-032_Tahfidz_-_Batas_Tahfidz_pada_Program_--_Form_Tambah_program_tidak_disimpan_--_TC-IMT-032_Mengganti_Jenis_Tahfidz_setelah_Batas_Ta.png
+BUG-012,Tiket 2 - Improvement Batas Tahfidz,Tahfidz (Detail Siswa),Card Data Siswa (Detail Siswa Tahfidz) tidak menampilkan Batas Tahfidz,"1. Login sebagai admin
+2. Buka detail anggota Aisyah Safitri pada Program B
+3. Periksa card Data Siswa",Card memuat 'Batas Tahfidz: Halaman' (PRD Detail Siswa poin 7; TC-IMT-071). Dikonfirmasi bug oleh dev 6 Okt 2026 (A5).,"Card hanya berisi instansi, nama, tingkat/kelas, Nama Program, Jenis, target. Lokasi: resources/views/student-affairs/tahfidz/member-detail.blade.php.",Low,P03,Fajar Ardiansyah,Open,6 Oktober 2026,,docs/evidence/BUG-012/TC-IMT-071_Tahfidz_-_Detail_Anggota_Batas_Tahfidz_--_TC-IMT-071_Data_Siswa_menampilkan_Batas_Tahfidz_failed_.png
+BUG-013,Tiket 2 - Improvement Batas Tahfidz,Tahfidz (Detail Program - Filter),Filter Batas Tahfidz: tingkat dengan satu pilihan tetap ditampilkan,"1. Login sebagai admin
+2. Buka detail Program F
+3. Buka filter Batas Tahfidz","Tingkat Juz dipilih otomatis dan dilewati, langsung Halaman (PRD Filter c; TC-IMT-062). Dikonfirmasi bug oleh dev 6 Okt 2026 (A4).",Filter Juz tetap tampil. MemberDatatable::filters() tidak memeriksa count($options) === 1 walau docblock-nya menyebut demikian.,Low,P03,Fajar Ardiansyah,Open,6 Oktober 2026,,docs/evidence/BUG-013/TC-IMT-062_Tahfidz_-_Filter_Batas_Tahfidz_Detail_Program_--_TC-IMT-062_Tingkat_filter_dengan_satu_pilihan_terpilih_otomatis_dan_dilewati_failed_.png
+BUG-014,Tiket 2 - Improvement Batas Tahfidz,Pengaturan (Batas Tahfidz),Form Tambah pengaturan Batas Tahfidz: Simpan aktif sebelum Instansi dipilih,"1. Login sebagai admin
+2. Buka Pengaturan > Kesiswaan > Batas Tahfidz
+3. Klik Tambah Batas Tahfidz
+4. Biarkan Instansi kosong
+5. Coba klik Simpan",Simpan nonaktif sampai Instansi dipilih; pesan wajib 'Lengkapi seluruh field yang wajib diisi.' (TC-IMT-017). Dikonfirmasi bug oleh dev 6 Okt 2026 (A2).,Simpan aktif; pesan validasi bawaan Laravel.,Low,P03,Fajar Ardiansyah,Open,6 Oktober 2026,,docs/evidence/BUG-014/TC-IMT-017_Pengaturan_Kesiswaan_-_Batas_Tahfidz_--_Form_Tambah_tidak_pernah_disimpan_--_TC-IMT-017_Tombol_Simpan_nonaktif_sebelum_Instansi_d.png
+BUG-015,Tiket 2 - Improvement Batas Tahfidz,Pengaturan (Batas Tahfidz),"Pengaturan Batas Tahfidz: tidak ada pesan gagal muat / gagal simpan, teks sesi berakhir bukan versi PRD","1. Login sebagai admin
+2. Buka Pengaturan > Kesiswaan > Batas Tahfidz dalam kondisi koneksi terganggu
+3. Pulihkan koneksi, klik Coba Lagi
+4. Isi form Tambah, putus koneksi, klik Simpan
+5. Pulihkan koneksi, isi form Tambah, logout di tab lain
+6. Klik Simpan","Gagal muat: 'Gagal memuat data, periksa koneksi Anda dan coba lagi.' + tombol Coba Lagi. Gagal simpan: 'Gagal menyimpan, periksa koneksi Anda dan coba lagi.', isian tetap. Sesi berakhir: 'Sesi Anda telah berakhir, silakan masuk kembali.' lalu ke login (TC-IMT-012, 021, 022). Dikonfirmasi bug oleh dev 6 Okt 2026 (A6).","Gagal muat & gagal simpan: tidak ada pesan apa pun. Sesi berakhir: diarahkan ke /login dengan notifikasi umum 'Sesi Anda Berakhir - Untuk keamanan akun, silakan login kembali.' (teks berbeda dari PRD).",Low,P03,Fajar Ardiansyah,Open,6 Oktober 2026,,docs/evidence/BUG-015/TC-IMT-012_Pengaturan_Kesiswaan_-_Batas_Tahfidz_--_List_pengaturan_--_TC-IMT-012_List_gagal_dimuat_failed_.png
+BUG-016,Tiket 2 - Improvement Batas Tahfidz,Pengaturan (Hak Akses Batas Tahfidz),Hak akses Batas Tahfidz tidak punya aksi Lihat/Tambah/Ubah; tombol Tambah & Edit tidak dicek izinnya,"1. Login sebagai admin
+2. Buka Pengaturan > Pengguna > Jenis Pengguna
+3. Klik Tambah Jenis Pengguna, cari section Pengaturan
+4. Periksa item Kesiswaan Batas Tahfidz
+5. Login dengan akun jenis pengguna QA BT Lihat
+6. Buka Pengaturan > Kesiswaan > Batas Tahfidz
+7. Ulangi langkah 5-6 dengan akun QA BT Lihat Tambah dan QA BT Lihat Ubah
+8. Login dengan akun QA BT Tanpa, buka URL /setting/student-affairs/tahfidz-limit",Item Batas Tahfidz punya aksi Semua/Lihat/Tambah/Ubah; hanya Lihat -> Tambah & Edit tidak tampil; Lihat+Tambah -> Tambah tampil; Lihat+Ubah -> Edit tampil (TC-IMT-003..006).,"Batas Tahfidz hanya checkbox on/off tanpa aksi. Jenis Lihat/Lihat Tambah/Lihat Ubah identik dengan Semua. View tahfidz-limit tidak memeriksa izin aksi (Tambah & Edit selalu tampil). Route hanya permission:setting,student-affairs, sedangkan sidebar canSubmenu(...,'student-affairs-tahfidz-limit') -> TERKONFIRMASI TC-IMT-002: akun tanpa izin Batas Tahfidz tetap bisa membuka halaman lewat URL langsung (Tambah & Edit tersedia).",High,P01,Fajar Ardiansyah,Open,6 Oktober 2026,,docs/evidence/BUG-016/TC-IMT-002_Pengaturan_Kesiswaan_-_Batas_Tahfidz_-_Hak_Akses_--_TC-IMT-002_Menu_tidak_tampil_untuk_jenis_pengguna_tanpa_hak_akses_Batas_Tahfi.png
+BUG-017,Di luar tiket,Pengaturan (Jenis Pengguna),"Form Jenis Pengguna: counter/toggle sub-grup tidak reaktif, toggle grup tidak sinkron saat Edit, judul modal Edit salah","1. Login sebagai admin
+2. Buka Pengaturan > Pengguna > Jenis Pengguna
+3. Klik Tambah Jenis Pengguna, cari section Pengaturan
+4. Centang Kesiswaan, lalu lepas Batas Tahfidz
+5. Tutup form, klik Edit pada jenis pengguna lama (mis. Khusus Fajar)",Lepas sub-modul -> label 'Kesiswaan 2/3' & toggle sub-grup mati; Edit -> toggle grup sesuai data; judul 'Edit Jenis Pengguna'.,"Label tetap 'Kesiswaan 3/3' & toggle menyala; grup Administrasi tampil 6/6 tetapi toggle OFF; judul modal Edit tetap 'Tambah Jenis Pengguna'. (Di luar scope tiket Tahfidz, ditemukan saat TC-IMT-006.)",Low,P03,Fajar Ardiansyah,Open,6 Oktober 2026,,docs/evidence/BUG-017/README.md
+BUG-018,Di luar tiket,Pengaturan (Pengguna),"Form Pengguna/Jenis Pengguna: nama dipaksa Title Case, pesan error email & pesan sukses kurang informatif","1. Login sebagai admin
+2. Buka Pengaturan > Pengguna > Jenis Pengguna
+3. Klik Tambah Jenis Pengguna, isi nama QA BT Semua, klik Simpan
+4. Buka Pengaturan > Pengguna, klik Tambah dengan email yang sudah terdaftar di akun Cazh, klik Simpan
+5. Klik Tambah dengan email baru, klik Simpan",Nama tampil sesuai input; pesan error menjelaskan jalan keluar; pesan sukses menyebut password dikirim ke email.,"Nama tampil 'Qa Bt Semua'; error 'Email sudah terdaftar dengan nomor HP berbeda...' (ganti No HP tidak membantu); sukses hanya 'Pengguna berhasil ditambahkan !'. Tidak ada item hak akses Dashboard. (Improvement, di luar scope tiket Tahfidz.)",Low,P04,Fajar Ardiansyah,Open,6 Oktober 2026,,docs/evidence/BUG-018/README.md

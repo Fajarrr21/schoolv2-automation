@@ -1,0 +1,151 @@
+{
+  "_comment": "Master data level-app CARDS School V2 (staging). Label: verified = terbukti dari HTML/run asli (element analysis #1, 5 Okt 2026: login, list program, detail program); crosschecked = dari source origin/staging (READ-ONLY ../cazh/cazh-cards-dashboard) tapi belum dilihat di HTML asli; unverified = hipotesis. Nilai crosschecked/unverified tetap wajib lewat element analysis sebelum dikunci.",
+  "app": {
+    "nama": "CARDS School V2",
+    "stack": "Laravel 9 + Blade + Livewire v2 (^2.9) + Alpine + Bootstrap 5 / Metronic + rappasoft/laravel-livewire-tables v1",
+    "_label": "crosschecked"
+  },
+  "routes": {
+    "login": {
+      "path": "/login",
+      "_label": "verified"
+    },
+    "home": {
+      "path": "/home",
+      "_label": "crosschecked",
+      "_src": "RouteServiceProvider::HOME"
+    },
+    "healthcheck": {
+      "path": "/healthcheck",
+      "_label": "verified",
+      "_src": "GET 5 Okt 2026 -> commit 4c4882d0, branch staging"
+    },
+    "tahfidzIndex": {
+      "path": "/student-affairs/tahfidz",
+      "_label": "verified"
+    },
+    "tahfidzDetail": {
+      "path": "/student-affairs/tahfidz/detail/{id}",
+      "_label": "verified"
+    },
+    "tahfidzDetailSiswa": {
+      "path": "/student-affairs/tahfidz/detail/{tahfidz_id}/member/{member_id}",
+      "_label": "verified",
+      "_src": "href link nama anggota"
+    },
+    "settingBatasTahfidz": {
+      "path": "/setting/student-affairs/tahfidz-limit",
+      "_label": "unverified",
+      "_src": "routes/cazh/setting.php; prefix 'setting' belum dicek"
+    },
+    "memberStudent": {
+      "path": "/member/student",
+      "_label": "verified"
+    },
+    "memberStudentDetail": {
+      "path": "/member/student/detail/{memberId}",
+      "_label": "verified",
+      "_note": "tab Tahfidz = #kt_tab_pane_tahfidz"
+    }
+  },
+  "akun": {
+    "admin": {
+      "_comment": "Email/password TIDAK di sini — ada di cypress.env.json (creds.staging).",
+      "role": "admin",
+      "_label": "verified"
+    }
+  },
+  "login": {
+    "heading": {
+      "value": "Masuk ke akun anda !",
+      "_label": "verified"
+    },
+    "submitText": {
+      "value": "Masuk",
+      "_label": "verified"
+    }
+  },
+  "livewire": {
+    "endpoint": {
+      "value": "POST /livewire/message/{komponen}",
+      "_label": "verified",
+      "_src": "element analysis #2: POST /livewire/message/student-affairs.tahfidz.member-detail -> 200"
+    },
+    "komponen": {
+      "tahfidzIndex": {
+        "value": "student-affairs.tahfidz.index",
+        "_label": "verified"
+      },
+      "tahfidzDatatable": {
+        "value": "student-affairs.tahfidz.datatable",
+        "_label": "verified"
+      },
+      "tahfidzDetail": {
+        "value": "student-affairs.tahfidz.detail",
+        "_label": "verified"
+      },
+      "memberDatatable": {
+        "value": "student-affairs.tahfidz.datatable.member-datatable",
+        "_label": "verified"
+      },
+      "memberDetail": {
+        "value": "student-affairs.tahfidz.member-detail",
+        "_label": "verified"
+      },
+      "progressHistoryDatatable": {
+        "value": "student-affairs.tahfidz.datatable.progress-history-datatable",
+        "_label": "verified"
+      },
+      "anggotaTahfidz": {
+        "value": "member.detail-member.table.tahfidz-datatable",
+        "_label": "verified"
+      }
+    }
+  },
+  "tabel": {
+    "baris": {
+      "selector": "tr[wire\\:key=\"table-row-{id}\"]",
+      "_label": "verified"
+    },
+    "cari": {
+      "selector": "input[wire\\:model=\"filters.search\"]",
+      "placeholder": "Cari",
+      "_label": "verified",
+      "_note": "substring, case-insensitive"
+    },
+    "aksiButton": {
+      "selector": "td:last-child button",
+      "text": "Aksi",
+      "_label": "verified",
+      "_note": "Alpine x-data open; header kolom aksi kosong"
+    },
+    "aksiMenuOpen": {
+      "selector": ".menu.show",
+      "_label": "verified"
+    },
+    "aksiItem": {
+      "selector": ".menu.show a.menu-link",
+      "_label": "verified"
+    }
+  },
+  "notifikasi": {
+    "sukses": {
+      "selector": ".alert.bg-primary",
+      "_label": "crosschecked",
+      "_src": "components/alert/notification.blade.php"
+    },
+    "gagal": {
+      "selector": ".alert.bg-danger",
+      "_label": "crosschecked"
+    }
+  },
+  "derau": {
+    "_comment": "Teks yang SELALU ada di DOM walau online (komponen utilities.offline). Jangan cy.contains longgar di body.",
+    "offline": [
+      "Waduhhh, internetnya mati nih",
+      "Anda sedang tidak terhubung ke internet"
+    ],
+    "consoleDetailProgram": "SyntaxError: Invalid or unexpected token",
+    "_label": "verified"
+  }
+}

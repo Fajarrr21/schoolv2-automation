@@ -1,0 +1,338 @@
+{
+  "_comment": "Fixture tiket 'Improvement Tahfidz' (Batas Tahfidz) — CARDS School V2 staging. VERIFIED lewat element analysis #3 (6 Okt 2026, extension, read-only) + source origin/staging/2a2a430e kecuali diberi _label lain. Program QA A-F dibuat user 6 Okt 2026.",
+  "routes": {
+    "pengaturan": "/setting/student-affairs/tahfidz-limit",
+    "listProgram": "/student-affairs/tahfidz",
+    "detailProgram": "/student-affairs/tahfidz/detail/{tahfidzId}",
+    "detailSiswa": "/student-affairs/tahfidz/detail/{tahfidzId}/member/{memberId}",
+    "anggotaDetail": "/member/student/detail/{memberId}"
+  },
+  "livewire": {
+    "pengaturan": "setting.student-affairs.tahfidz-limit.index",
+    "pengaturanTabel": "setting.student-affairs.tahfidz-limit.datatable",
+    "program": "student-affairs.tahfidz.index",
+    "programTabel": "student-affairs.tahfidz.datatable",
+    "detailProgram": "student-affairs.tahfidz.detail",
+    "anggotaTabel": "student-affairs.tahfidz.datatable.member-datatable",
+    "memberDetail": "student-affairs.tahfidz.member-detail"
+  },
+  "pengaturan": {
+    "modal": "#modal-tahfidz-limit",
+    "judulTambah": "Tambah Batas Tahfidz",
+    "judulEdit": "Edit Batas Tahfidz",
+    "kolom": [
+      "Instansi",
+      "Batas Tahfidz",
+      "Metode Perhitungan Halaman",
+      "Dibuat Pada",
+      "Aksi"
+    ],
+    "opsiBatas": {
+      "juz": "Juz",
+      "halaman": "Halaman",
+      "surah": "Surah",
+      "ayat": "Ayat"
+    },
+    "opsiMetode": {
+      "mushaf": "Nomor halaman mushaf (1 sampai 604)",
+      "per_juz": "Halaman dimulai dari 1 pada setiap juz"
+    },
+    "helperBatas": "Menentukan sampai satuan mana progres hafalan dicatat. Nilai ini menjadi nilai awal saat membuat program tahfidz baru dan masih dapat diubah pada masing-masing program.",
+    "helperMetode": "Menentukan cara penomoran halaman yang ditampilkan saat mencatat progres hafalan.",
+    "pesanSimpan": "Pengaturan Batas Tahfidz berhasil disimpan.",
+    "pesanEdit": "Perubahan pengaturan Batas Tahfidz berhasil disimpan.",
+    "pesanUnik": "Instansi ini sudah memiliki pengaturan Batas Tahfidz.",
+    "pesanWajibPrd": "Lengkapi seluruh field yang wajib diisi.",
+    "pesanSemuaPunya": "Seluruh instansi sudah memiliki pengaturan Batas Tahfidz.",
+    "tabelKosong": "Tidak ada data yang ditemukan.",
+    "pesanGagalMuat": "Gagal memuat data, periksa koneksi Anda dan coba lagi.",
+    "pesanGagalSimpan": "Gagal menyimpan, periksa koneksi Anda dan coba lagi.",
+    "pesanSesiBerakhir": "Sesi Anda telah berakhir, silakan masuk kembali.",
+    "btnCobaLagi": "Coba Lagi",
+    "_labelPesanPrd": "Teks PRD (TC-IMT-012/021/022). Dev 6 Okt 2026 (A6): belum ada di V2 -> bug."
+  },
+  "program": {
+    "modal": "#modal-tahfidz",
+    "opsiJenisJuz": [
+      "juz",
+      "halaman",
+      "ayat"
+    ],
+    "opsiJenisSurah": [
+      "surah",
+      "ayat"
+    ],
+    "helperBatas": "Menentukan sampai satuan mana progres hafalan dicatat pada program ini.",
+    "pesanTerkunci": "Batas Tahfidz tidak dapat diubah karena program sudah memiliki riwayat progres.",
+    "pesanDisesuaikan": "Pilihan Batas Tahfidz disesuaikan karena Jenis Tahfidz diubah.",
+    "pesanEdit": "Program Tahfidz berhasil diedit!",
+    "_catatan": "JANGAN simpan form Tambah program: create mengirim notifikasi 'Tahfidz Baru' ke siswa/orang tua. Edit tidak mengirim notifikasi."
+  },
+  "riwayat": {
+    "pesanTambah": "Riwayat progress berhasil ditambahkan!",
+    "pesanEdit": "Riwayat progress berhasil diedit!",
+    "pesanHapus": "Riwayat progress berhasil dihapus!",
+    "minimalSatuan": "Pilih minimal satu satuan yang sudah hafal.",
+    "lengkapiPilihan": "Lengkapi pilihan di atas terlebih dahulu",
+    "tandai": "Tandai {step} yang sudah hafal",
+    "kolomExport": {
+      "tanggalRiwayatPrefix": "Tanggal Riwayat",
+      "capaian": "Capaian Hafalan",
+      "pencapaian": "Pencapaian",
+      "deskripsi": "Deskripsi"
+    },
+    "_label": "source origin/staging (member-detail.blade.php, MemberDetail.php, progress/export.blade.php)"
+  },
+  "instansi": {
+    "qa": {
+      "nama": "SMP Digital Indonesia+",
+      "office": "62ea45bf43bea4003638b6f3",
+      "settingId": 2,
+      "awal": {
+        "batas": "ayat",
+        "metode": "per_juz"
+      },
+      "_catatan": "Nilai AWAL (verified 6 Okt 2026). Test mengubah lalu MENGEMBALIKAN ke nilai ini; cleanup juga memulihkan."
+    },
+    "denganSurah": {
+      "nama": "SD Digital Indonesia",
+      "batas": "surah",
+      "_label": "verified (tidak diubah test)"
+    },
+    "denganHalaman": {
+      "nama": "SMA Digital Indonesia",
+      "batas": "halaman",
+      "metode": "mushaf",
+      "_label": "verified (tidak diubah test)"
+    },
+    "tanpaPengaturan": {
+      "nama": "SMP Islam Terpadu Purwokerto",
+      "_label": "verified: muncul di dropdown Tambah (belum punya pengaturan). Tidak boleh dibuatkan pengaturan (permanen)."
+    }
+  },
+  "mushaf": {
+    "_comment": "Value halaman = nomor mushaf absolut. Halaman 62 milik Juz 3 & 4 (juz 4 mulai 3:93).",
+    "juz": {
+      "1": [
+        1,
+        21
+      ],
+      "2": [
+        22,
+        41
+      ],
+      "3": [
+        42,
+        62
+      ],
+      "16": [
+        302,
+        321
+      ],
+      "26": [
+        502,
+        521
+      ],
+      "29": [
+        562,
+        581
+      ],
+      "30": [
+        582,
+        604
+      ]
+    },
+    "halaman604Surah": [
+      112,
+      113,
+      114
+    ],
+    "alFalaqAyat": 5,
+    "juz30JumlahSurah": 37,
+    "totalHalaman": 604
+  },
+  "programs": {
+    "A": {
+      "id": 249,
+      "nama": "QAAUTO A Juz Juz",
+      "jenis": "juz",
+      "batas": "juz",
+      "target": [
+        26,
+        27,
+        28,
+        29,
+        30
+      ],
+      "total": 5,
+      "satuan": "juz"
+    },
+    "B": {
+      "id": 251,
+      "nama": "QAAUTO B Juz Halaman",
+      "jenis": "juz",
+      "batas": "halaman",
+      "target": [
+        2,
+        3
+      ],
+      "total": 41,
+      "satuan": "halaman"
+    },
+    "C": {
+      "id": 252,
+      "nama": "QAAUTO C Juz Ayat",
+      "jenis": "juz",
+      "batas": "ayat",
+      "target": [
+        29,
+        30
+      ],
+      "total": 995,
+      "satuan": "ayat"
+    },
+    "D": {
+      "id": 253,
+      "nama": "QAAUTO D Surah Surah",
+      "jenis": "surah",
+      "batas": "surah",
+      "target": [
+        78,
+        79,
+        80,
+        81,
+        82
+      ],
+      "total": 5,
+      "satuan": "surah"
+    },
+    "E": {
+      "id": 254,
+      "nama": "QAAUTO E Surah Ayat",
+      "jenis": "surah",
+      "batas": "ayat",
+      "target": [
+        67,
+        78
+      ],
+      "total": 70,
+      "satuan": "ayat"
+    },
+    "F": {
+      "id": 255,
+      "nama": "QAAUTO F Juz30 Halaman",
+      "jenis": "juz",
+      "batas": "halaman",
+      "target": [
+        30
+      ],
+      "total": 23,
+      "satuan": "halaman"
+    },
+    "U": {
+      "id": 247,
+      "nama": "QAAUTO Juz Ayat",
+      "jenis": "juz",
+      "batas": "ayat",
+      "target": "1-30",
+      "_catatan": "Program tiket 1 (Masal, target Juz 1-30) — dipakai TC mushaf (Juz 1 & Juz 30)."
+    }
+  },
+  "siswa": {
+    "id": 1082,
+    "nama": "Aisyah Safitri"
+  },
+  "surah": {
+    "67": "Al-Mulk",
+    "78": "An-Naba'",
+    "79": "An-Nazi'at",
+    "80": "'Abasa",
+    "81": "At-Takwir",
+    "82": "Al-Infitar",
+    "112": "Al-Ikhlas",
+    "113": "Al-Falaq",
+    "114": "An-Nas"
+  },
+  "testData": {
+    "prefix": "QA"
+  },
+  "bug": {
+    "_comment": "Bug tiket Improvement (run Cypress 6 Okt 2026, staging 2a2a430e). Evidence: python scripts/collect_evidence.py <log> cypress/fixtures/batas.json Keputusan dev 6 Okt 2026: A1-A6 & B1-B2 = bug.",
+    "BUG-007": {
+      "judul": "Detail program: anggota tampil '-', 0%, 'Belum ada riwayat' bila riwayat terbarunya ada di program lain",
+      "tc": [
+        "TC-IMT-095",
+        "TC-IMT-098"
+      ]
+    },
+    "BUG-008": {
+      "judul": "Filter Batas Tahfidz di Detail program selalu HTTP 500 (rekursi filters() <-> getFilter())",
+      "tc": [
+        "TC-IMT-057",
+        "TC-IMT-058",
+        "TC-IMT-059",
+        "TC-IMT-060",
+        "TC-IMT-061",
+        "TC-IMT-063",
+        "TC-IMT-064"
+      ]
+    },
+    "BUG-009": {
+      "judul": "Dua riwayat di tanggal sama: Pencapaian riwayat pertama ikut menghitung riwayat kedua",
+      "tc": [
+        "TC-IMT-098"
+      ]
+    },
+    "BUG-010": {
+      "judul": "Riwayat lama ikut berubah penomoran halamannya setelah metode instansi diganti",
+      "tc": [
+        "TC-IMT-105"
+      ]
+    },
+    "BUG-011": {
+      "judul": "Ganti Jenis Tahfidz: Batas diganti default instansi (bukan Surah) dan keterangan 'disesuaikan' tidak tampil",
+      "tc": [
+        "TC-IMT-032"
+      ]
+    },
+    "BUG-012": {
+      "judul": "Card Data Siswa (Detail Siswa Tahfidz) tidak menampilkan Batas Tahfidz",
+      "tc": [
+        "TC-IMT-071"
+      ]
+    },
+    "BUG-013": {
+      "judul": "Filter Batas Tahfidz: tingkat dengan satu pilihan tetap ditampilkan",
+      "tc": [
+        "TC-IMT-062"
+      ]
+    },
+    "BUG-014": {
+      "judul": "Form Tambah pengaturan Batas Tahfidz: Simpan aktif sebelum Instansi dipilih",
+      "tc": [
+        "TC-IMT-017"
+      ]
+    },
+    "BUG-015": {
+      "judul": "Pengaturan Batas Tahfidz: tidak ada pesan gagal muat/gagal simpan; teks sesi berakhir bukan versi PRD",
+      "tc": [
+        "TC-IMT-012",
+        "TC-IMT-021",
+        "TC-IMT-022"
+      ]
+    },
+    "BUG-016": {
+      "judul": "Hak akses Batas Tahfidz tidak punya aksi Lihat/Tambah/Ubah",
+      "tc": [
+        "TC-IMT-002",
+        "TC-IMT-003",
+        "TC-IMT-004",
+        "TC-IMT-005"
+      ]
+    }
+  },
+  "siswa2": {
+    "id": 686,
+    "_catatan": "Siswa staging yang dipilih user 6 Okt 2026 (D3/no.4) untuk TC-IMT-065. Test menambahkannya ke Program B (mengirim notifikasi 'Tahfidz Baru') lalu MENGHAPUS keanggotaannya lagi (hapus anggota tanpa notifikasi). Nama dibaca dari halaman."
+  }
+}

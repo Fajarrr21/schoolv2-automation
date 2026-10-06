@@ -1,0 +1,13 @@
+node_modules/
+cypress/reports/
+cypress/screenshots/
+cypress/videos/
+cypress/downloads/
+Bug_Tracker_QA_CARDS.xlsx
+
+# Kredensial per-environment — RAHASIA, JANGAN commit.
+# Template (aman): cypress.env.example.json
+cypress.env.json
+
+# File lock Office
+~$*

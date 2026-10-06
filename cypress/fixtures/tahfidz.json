@@ -1,0 +1,375 @@
+{
+  "_comment": "Fixture modul Tahfidz - Multi Select Capaian (CARDS School V2 staging). Teks/selector VERIFIED lewat element analysis #2 (6 Okt 2026, Detail Siswa + modal Tambah Riwayat) kecuali diberi _label lain. Blok 'staging' = data KHUSUS QA; selama wajibnya kosong, spec fail-fast.",
+  "routes": {
+    "detailProgram": "/student-affairs/tahfidz/detail/{tahfidzId}",
+    "detailSiswa": "/student-affairs/tahfidz/detail/{tahfidzId}/member/{memberId}",
+    "anggotaDetail": "/member/student/detail/{memberId}"
+  },
+  "livewire": {
+    "memberDetail": "student-affairs.tahfidz.member-detail",
+    "progressDatatable": "student-affairs.tahfidz.datatable.progress-history-datatable",
+    "memberDatatable": "student-affairs.tahfidz.datatable.member-datatable",
+    "anggotaTahfidz": "member.detail-member.table.tahfidz-datatable"
+  },
+  "label": {
+    "modalTambah": "Tambah Riwayat Progress",
+    "modalEdit": "Edit Riwayat Progress",
+    "modalHapus": "Hapus Riwayat Progress",
+    "capaian": "Capaian Hafalan",
+    "tanggal": "Tanggal",
+    "deskripsi": "Deskripsi",
+    "pilihJuz": "Pilih Juz",
+    "pilihHalaman": "Pilih Halaman",
+    "pilihSurah": "Pilih Surah",
+    "tandaiAyat": "Tandai Ayat yang sudah hafal",
+    "pilihRentang": "Pilih Rentang Ayat",
+    "pilihSemua": "Pilih Semua Ayat",
+    "pilihSemuaHasil": "Pilih Semua Hasil",
+    "hapusSemua": "Hapus Semua Ayat Terpilih",
+    "dariAyat": "Dari Ayat",
+    "sampaiAyat": "Sampai Ayat",
+    "terapkan": "Terapkan",
+    "muatBerikutnya": "Muat ayat berikutnya",
+    "tambahRiwayat": "Tambah Riwayat",
+    "excel": "Excel",
+    "simpan": "Simpan",
+    "batal": "Batal",
+    "dipilih": "{n} {step} dipilih",
+    "popupGanti": {
+      "judul": "Ganti Pilihan?",
+      "pesan": "Ayat yang sudah dipilih akan dihapus ketika Anda mengganti pilihan ini. Lanjutkan?",
+      "batal": "Batal",
+      "ok": "Ganti"
+    },
+    "popupHapusSemua": {
+      "judul": "Hapus Semua Ayat Terpilih?",
+      "pesan": "Seluruh ayat yang sudah dipilih akan dihapus dan Anda perlu memilih ulang. Lanjutkan?",
+      "batal": "Batal",
+      "ok": "Hapus Semua"
+    },
+    "kolomRiwayat": [
+      "Tanggal Dibuat",
+      "Tanggal Riwayat",
+      "Deskripsi",
+      "Capaian Hafalan",
+      "Pencapaian",
+      "Dibuat Oleh",
+      ""
+    ],
+    "kolomExport": {
+      "tanggalRiwayatPrefix": "Tanggal Riwayat",
+      "capaian": "Capaian Hafalan",
+      "pencapaian": "Pencapaian",
+      "deskripsi": "Deskripsi",
+      "_label": "crosschecked"
+    }
+  },
+  "kolom": {
+    "_comment": "Index 0-based kolom tabel Riwayat Progress (verified D.3).",
+    "deskripsi": 2,
+    "capaian": 3,
+    "pencapaian": 4
+  },
+  "placeholder": {
+    "cariAyat": "Cari Ayat",
+    "cariJuz": "Cari Juz",
+    "cariHalaman": "Cari Halaman",
+    "cariSurah": "Cari Surah",
+    "cariRiwayat": "Cari"
+  },
+  "pesan": {
+    "tambahSukses": "Riwayat progress berhasil ditambahkan!",
+    "editSukses": "Riwayat progress berhasil diedit!",
+    "hapusSukses": "Riwayat progress berhasil dihapus!",
+    "minimalSatuan": "Pilih minimal satu satuan yang sudah hafal.",
+    "belumAdaAyat": "Belum ada ayat yang dipilih.",
+    "ayatTerpilih": "{n} ayat terpilih",
+    "ayatTidakDitemukan": "Ayat tidak ditemukan.",
+    "tidakAdaAyat": "Tidak ada ayat pada pilihan ini.",
+    "lengkapiPilihan": "Lengkapi pilihan di atas terlebih dahulu",
+    "memuat": "Memuat daftar ayat...",
+    "gagalDimuat": "Daftar ayat gagal dimuat.",
+    "sudahTercatat": "Sudah tercatat pada riwayat lain",
+    "semuaTerkunci": "Seluruh ayat pada pilihan ini sudah tercatat pada riwayat lain.",
+    "rentangSemuaTerkunci": "Seluruh ayat pada rentang ini sudah tercatat pada riwayat lain.",
+    "rentangDitambahkan": "{n} ayat ditambahkan.",
+    "rentangDilewati": "{n} ayat ditambahkan, {m} ayat dilewati karena sudah tercatat pada riwayat lain.",
+    "bentrokSimpan": "Sebagian ayat yang Anda pilih sudah dicatat pada riwayat lain. Daftar ayat dimuat ulang, silakan periksa kembali.",
+    "tabelKosong": "Tidak ada data yang ditemukan.",
+    "_label": "verified kecuali tambahSukses/editSukses/hapusSukses/minimalSatuan/rentangDilewati/rentangSemuaTerkunci/semuaTerkunci/bentrokSimpan = crosschecked (source)"
+  },
+  "format": {
+    "_comment": "Pola penulisan capaian. Default = PRD ('QS. {surat} ayat {ayat}'). V2 staging menulis '{surat} Ayat {ayat}' (pertanyaan Q2). Kalau PM menerima pola V2, ganti capaianPerSurat dengan nilai capaianPerSuratV2 — cukup satu baris.",
+    "capaianPerSurat": "QS. {surat} ayat {ayat}",
+    "capaianPerSuratV2": "{surat} Ayat {ayat}",
+    "maksSuratList": 2,
+    "pencapaian": "{persen}% ({done} dari {total} {satuan})"
+  },
+  "surah": {
+    "_comment": "Nama & jumlah ayat sesuai konstanta app V2 (Constant::QURAN_SURAHS, crosschecked).",
+    "19": {
+      "nama": "Maryam",
+      "ayat": 98
+    },
+    "20": {
+      "nama": "Taha",
+      "ayat": 135
+    },
+    "78": {
+      "nama": "An-Naba'",
+      "ayat": 40
+    },
+    "79": {
+      "nama": "An-Nazi'at",
+      "ayat": 46
+    },
+    "80": {
+      "nama": "'Abasa",
+      "ayat": 42
+    },
+    "81": {
+      "nama": "At-Takwir",
+      "ayat": 29
+    }
+  },
+  "mushaf": {
+    "_comment": "Nomor halaman mushaf ABSOLUT (value toggleStepValue('halaman', N)). Label halaman per juz tidak stabil ('Juz 16 - Halaman 11' vs 'Halaman 11') -> selalu pakai value.",
+    "halamanJuz": {
+      "16": [
+        302,
+        321
+      ],
+      "30": [
+        582,
+        604
+      ],
+      "_label": "verified (43 opsi untuk Juz 16 + 30)"
+    },
+    "halamanMaryamTaha": {
+      "value": 312,
+      "surah": [
+        19,
+        20
+      ],
+      "maryamAyat": [
+        96,
+        98
+      ],
+      "_label": "verified (Maryam 96-98 tampil)"
+    },
+    "halamanTahaSaja": {
+      "value": 313,
+      "surah": [
+        20
+      ],
+      "_label": "verified (run 6 Okt 2026, TC-021 PASS: hanya Taha)"
+    },
+    "halamanJuz30Awal": {
+      "value": 582,
+      "surah": [
+        78
+      ],
+      "_label": "verified (An-Naba' muncul di opsi surah)"
+    },
+    "halamanNabaNaziat": {
+      "value": 583,
+      "surah": [
+        78,
+        79
+      ],
+      "_label": "SALAH (run 6 Okt 2026): hal. 583 hanya An-Naba' -> step surah tersembunyi. Tidak dipakai lagi."
+    },
+    "surahOpsiHal312dan582": [
+      19,
+      20,
+      78
+    ],
+    "pageSize": 60
+  },
+  "testData": {
+    "prefix": "QA"
+  },
+  "bug": {
+    "_comment": "Bug yang sudah diketahui. Test meng-assert perilaku yang BENAR (tetap merah sampai diperbaiki).",
+    "BUG-001": {
+      "judul": "Program Jenis Juz: step Pilih Surah hilang setelah 1 surah dicentang, surat kedua tidak bisa dipilih",
+      "tc": [
+        "TC-011"
+      ],
+      "src": "TahfidzUnit::surahOptions() memakai ayatScope($chosen) yang ikut menyaring surah terpilih -> opsi tinggal 1 -> auto-pilih & langkah disembunyikan",
+      "status": "Fixed (deploy 2a2a430e, 6 Okt 2026; TC-011 PASS)"
+    },
+    "BUG-002": {
+      "judul": "Popup Ganti Pilihan > Batal: checkbox juz/halaman tetap tidak tercentang padahal pilihan tidak berubah",
+      "tc": [
+        "TC-026"
+      ]
+    },
+    "BUG-003": {
+      "judul": "Data office (termasuk field berbentuk hash password) bocor ke HTML list program tahfidz",
+      "tc": [],
+      "_catatan": "Di luar tiket; bukan TC (konvensi tanpa security case)."
+    },
+    "BUG-004": {
+      "judul": "Daftar Ayat tidak dimuat otomatis saat digulir (hanya lewat tombol)",
+      "tc": [
+        "TC-031"
+      ]
+    },
+    "BUG-005": {
+      "judul": "Penulisan capaian tanpa 'QS.' dan 'Ayat' kapital (PRD: 'QS. {surat} ayat {ayat}')",
+      "tc": [
+        "TC-081",
+        "TC-082",
+        "TC-083",
+        "TC-084",
+        "TC-085",
+        "TC-086",
+        "TC-090",
+        "TC-091"
+      ]
+    },
+    "BUG-006": {
+      "judul": "Popup Ganti Pilihan muncul walau tidak ada ayat terpilih yang akan dihapus",
+      "tc": [],
+      "_catatan": "Keputusan Q5; evidence dari element analysis #2"
+    }
+  },
+  "staging": {
+    "_comment": "DATA KHUSUS QA — jangan diisi dengan program/siswa milik tim lain. Wajib: siswa + programUtama + programSurahAyat. Opsional: sisanya (tanpa itu TC terkait di-skip sebagai Blocked).",
+    "siswa": {
+      "id": 1082,
+      "nama": "Aisyah Safitri",
+      "_label": "verified (element analysis #2)",
+      "_konfirmasi": "Dipakai sebagai siswa QA (anggota tunggal QAAUTO Surah Ayat, dibuat user 6 Okt 2026)."
+    },
+    "programUtama": {
+      "_kode": "PRG-A",
+      "id": 247,
+      "nama": "QAAUTO Juz Ayat",
+      "jenis": "juz",
+      "batas": "ayat",
+      "target": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30
+      ],
+      "_catatan": "Target Juz 1-30 dan TIDAK bisa diedit (terkunci di form Edit, 6 Okt 2026). Tipe Masal. TC-015 Blocked."
+    },
+    "programSurahAyat": {
+      "_kode": "PRG-SA",
+      "id": 248,
+      "nama": "QAAUTO Surah Ayat",
+      "jenis": "surah",
+      "batas": "ayat",
+      "target": [
+        19,
+        20,
+        78,
+        79,
+        80,
+        81
+      ],
+      "_catatan": "WAJIB (multi surat tidak bisa di Jenis Juz karena BUG-001). Target Maryam, Taha, An-Naba', An-Nazi'at, 'Abasa, At-Takwir = 390 ayat.",
+      "_label": "verified (screenshot user 6 Okt 2026: Satuan, anggota Aisyah, 0% (0 dari 390 ayat))"
+    },
+    "programBatasJuz": {
+      "_kode": "PRG-J (= Program A tiket Improvement)",
+      "id": 249,
+      "nama": "QAAUTO A Juz Juz",
+      "jenis": "juz",
+      "batas": "juz",
+      "target": [
+        26,
+        27,
+        28,
+        29,
+        30
+      ],
+      "_label": "verified (laporan data uji user 6 Okt 2026): 0% (0 dari 5 juz)"
+    },
+    "programBatasHalaman": {
+      "_kode": "PRG-H (= Program B tiket Improvement)",
+      "id": 251,
+      "nama": "QAAUTO B Juz Halaman",
+      "jenis": "juz",
+      "batas": "halaman",
+      "target": [
+        2,
+        3
+      ],
+      "_label": "verified (laporan data uji user 6 Okt 2026): 0% (0 dari 41 halaman) — hal. 62 milik Juz 3 & 4"
+    },
+    "programBatasSurah": {
+      "_kode": "PRG-S (= Program D tiket Improvement)",
+      "id": 253,
+      "nama": "QAAUTO D Surah Surah",
+      "jenis": "surah",
+      "batas": "surah",
+      "target": [
+        78,
+        79,
+        80,
+        81,
+        82
+      ],
+      "_label": "verified (laporan data uji user 6 Okt 2026): 0% (0 dari 5 surah)"
+    },
+    "siswaRiwayatLama": {
+      "_kode": "RS",
+      "tahfidzId": null,
+      "memberId": null,
+      "deskripsi": null,
+      "_catatan": "Opsional (TC-087): riwayat lama sebelum rilis, tidak bisa dibuat lewat UI baru."
+    },
+    "programTargetTerbatas": {
+      "_kode": "Program C tiket Improvement (dipakai TC-015)",
+      "id": 252,
+      "nama": "QAAUTO C Juz Ayat",
+      "jenis": "juz",
+      "batas": "ayat",
+      "target": [
+        29,
+        30
+      ],
+      "_label": "verified (laporan data uji user 6 Okt 2026): 0% (0 dari 995 ayat)"
+    },
+    "_programLain": "Program #250 'QAAUTO Juz 30 Ayat' BUKAN milik QA project ini (anggota ADINDA R P) — JANGAN dipakai/dibersihkan."
+  },
+  "keputusan": {
+    "_comment": "Jawaban user atas pertanyaan PRD-ambigu (6 Okt 2026).",
+    "Q1": "Menu Tambah Riwayat di Aksi Detail program TIDAK wajib",
+    "Q2": "Format penulisan capaian sesuai PRD: 'QS. {surat} ayat {ayat}'",
+    "Q3": "USER 6 Okt 2026: dampak kecil -> dicatat sebagai bug Low (BUG-004).",
+    "Q4": "Cari Ayat 'mengandung' (5 -> 5, 15, 25, 50-59) BENAR",
+    "BUG-003": "Dicatat (user: ikut rekomendasi)",
+    "Q5": "USER 6 Okt 2026: dicatat sebagai bug Low (BUG-006)."
+  }
+}
