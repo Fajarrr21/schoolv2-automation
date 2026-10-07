@@ -61,7 +61,7 @@ describe('Tahfidz - Filter Batas Tahfidz (Detail Program)', () => {
 
   it('TC-IMT-057 : Filter Batas Tahfidz pada program Batas Juz', () => {
     buka(P.A);
-    TahfidzDetailPage.labelFilter().should('deep.eq', ['Juz']);
+    TahfidzDetailPage.assertLabelFilter((l) => expect(l).to.deep.eq(['Juz']));
     opsiFilter('juz').should('deep.eq', P.A.target);
     TahfidzDetailPage.pilihFilterBatas('juz', 28);
     harusTampil();
@@ -70,9 +70,9 @@ describe('Tahfidz - Filter Batas Tahfidz (Detail Program)', () => {
   it('TC-IMT-058 : Filter Batas Tahfidz pada program Batas Halaman (Juz lalu Halaman)', () => {
     const [a, b] = fx.mushaf.juz['3'];
     buka(P.B);
-    TahfidzDetailPage.labelFilter().should('deep.eq', ['Juz']);
+    TahfidzDetailPage.assertLabelFilter((l) => expect(l).to.deep.eq(['Juz']));
     TahfidzDetailPage.pilihFilterBatas('juz', 3);
-    TahfidzDetailPage.labelFilter().should('deep.eq', ['Juz', 'Halaman']);
+    TahfidzDetailPage.assertLabelFilter((l) => expect(l).to.deep.eq(['Juz', 'Halaman']));
     opsiFilter('halaman').should((v) => {
       expect(v.length).to.eq(b - a + 1);
       v.forEach((p) => expect(p, 'halaman milik Juz 3').to.be.within(a, b));
@@ -83,7 +83,7 @@ describe('Tahfidz - Filter Batas Tahfidz (Detail Program)', () => {
 
   it('TC-IMT-059 : Filter Batas Tahfidz pada program Batas Surah', () => {
     buka(P.D);
-    TahfidzDetailPage.labelFilter().should('deep.eq', ['Surah']);
+    TahfidzDetailPage.assertLabelFilter((l) => expect(l).to.deep.eq(['Surah']));
     TahfidzDetailPage.pilihFilterBatas('surah', 79);
     harusTampil();
   });
@@ -94,7 +94,7 @@ describe('Tahfidz - Filter Batas Tahfidz (Detail Program)', () => {
     TahfidzDetailPage.pilihFilterBatas('halaman', 604);
     opsiFilter('surah').should('deep.eq', fx.mushaf.halaman604Surah);
     TahfidzDetailPage.pilihFilterBatas('surah', 114);
-    TahfidzDetailPage.labelFilter().should('deep.eq', ['Juz', 'Halaman', 'Surah', 'Ayat']);
+    TahfidzDetailPage.assertLabelFilter((l) => expect(l).to.deep.eq(['Juz', 'Halaman', 'Surah', 'Ayat']));
     TahfidzDetailPage.pilihFilterBatas('ayat', 6);
     harusTampil();
   });
@@ -110,7 +110,10 @@ describe('Tahfidz - Filter Batas Tahfidz (Detail Program)', () => {
     // PRD Detail Tahfidz, Filter c. Program F target hanya Juz 30 -> tingkat Juz
     // dilewati, langsung Halaman. EA#3: V2 tetap menampilkan filter Juz (calon bug).
     buka(P.F);
-    TahfidzDetailPage.labelFilter().should('not.include', 'Juz').and('include', 'Halaman');
+    TahfidzDetailPage.assertLabelFilter((l) => {
+      expect(l, 'tingkat Juz dilewati').not.to.include('Juz');
+      expect(l, 'langsung Halaman').to.include('Halaman');
+    });
   });
 
   it('TC-IMT-063 : Filter tanpa hasil dan mengosongkan filter', () => {

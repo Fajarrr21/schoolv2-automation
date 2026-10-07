@@ -81,7 +81,10 @@ describe('Tahfidz - Mushaf Madinah & Metode Penomoran', () => {
     Form.batal();
   });
 
-  it('TC-IMT-105 : Ubah metode halaman tidak mengubah riwayat yang sudah tersimpan', () => {
+  // SKIP: BUG-010 diputuskan Won't Fix (known limitation, 7 Okt 2026) — label halaman riwayat
+  // lama mengikuti metode instansi saat ini; fix butuh migrasi. Assertion PRD tetap disimpan
+  // supaya bisa diaktifkan lagi bila migrasinya dikerjakan.
+  it.skip('TC-IMT-105 : Ubah metode halaman tidak mengubah riwayat yang sudah tersimpan', () => {
     // PRD Perilaku Umum: riwayat lama tetap menampilkan nomor halaman saat dibuat.
     // Source V2: achievement_display memformat ulang dengan metode SAAT INI -> calon bug.
     const awal = fx.instansi.qa.awal.metode;

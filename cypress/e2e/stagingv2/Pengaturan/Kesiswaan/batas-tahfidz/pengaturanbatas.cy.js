@@ -42,10 +42,35 @@ describe('Pengaturan Kesiswaan - Batas Tahfidz', () => {
     siapkan();
   });
 
+  // Koneksi SELALU dipulihkan, juga bila test offline gagal di tengah jalan.
+  afterEach(() => {
+    offline(false);
+  });
+
   after(() => {
     siapkan();
     cy.then(() => pulihkanPengaturan(fx));
   });
+
+  /**
+   * Browser offline/online sungguhan (Chrome DevTools Protocol). Fix BUG-015 (deploy a9e3c84c)
+   * memakai `wire:offline`, yang hanya bereaksi pada event offline browser, bukan request gagal.
+   */
+  // Run 7 Okt 2026: emulasi offline CDP tidak mengubah navigator.onLine di iframe AUT, jadi
+  // event offline/online dikirim langsung ke window app (yang didengar Livewire untuk wire:offline).
+  const offline = (aktif) => {
+    cy.window({ log: false }).then((w) => {
+      w.dispatchEvent(new w.Event(aktif ? 'offline' : 'online'));
+    });
+  };
+
+  /** Instansi pertama yang masih tersedia di dropdown form Tambah (belum punya pengaturan). */
+  const instansiTersedia = () =>
+    PengaturanBatasPage.elements.instansiSelect().find('option').then(($o) => {
+      const opsi = Cypress.$.makeArray($o).filter((o) => o.value);
+      expect(opsi.length, 'masih ada instansi tanpa pengaturan').to.be.gt(0);
+      return opsi[0].value;
+    });
 
   // =========================================================================
   describe('List pengaturan', () => {
@@ -106,15 +131,15 @@ describe('Pengaturan Kesiswaan - Batas Tahfidz', () => {
     });
 
     it('TC-IMT-012 : List gagal dimuat', () => {
-      // Koneksi putus disimulasikan: request datatable digagalkan sebelum sampai server.
+      // Koneksi putus = browser offline (emulasi Chrome), lalu dipulihkan.
       PengaturanBatasPage.visit();
-      cy.intercept('POST', `**/livewire/message/${fx.livewire.pengaturanTabel}`, { forceNetworkError: true }).as('lwTabelPutus');
-      PengaturanBatasPage.elements.cari().clear().type('Digital');
-      cy.wait('@lwTabelPutus');
+      offline(true);
       cy.contains(fx.pengaturan.pesanGagalMuat).should('be.visible');
-      // Koneksi pulih -> Coba Lagi memuat list (intercept baru menang atas yang lama).
-      cy.intercept('POST', `**/livewire/message/${fx.livewire.pengaturanTabel}`, (req) => req.continue()).as('lwTabelPulih');
-      cy.contains('button', fx.pengaturan.btnCobaLagi).click();
+      cy.contains('button', fx.pengaturan.btnCobaLagi).should('be.visible');
+      // PRD langkah 2: pulihkan koneksi, LALU klik Coba Lagi -> list dimuat.
+      offline(false);
+      cy.intercept('POST', `**/livewire/message/${fx.livewire.pengaturanTabel}`).as('lwTabelPulih');
+      cy.contains('button', fx.pengaturan.btnCobaLagi).should('be.visible').click();
       cy.wait('@lwTabelPulih').its('response.statusCode').should('eq', 200);
       PengaturanBatasPage.elements.row(QA.nama).should('be.visible');
     });
@@ -180,7 +205,7 @@ describe('Pengaturan Kesiswaan - Batas Tahfidz', () => {
         const sebelum = P.barisData($t);
         PengaturanBatasPage.bukaTambah();
         PengaturanBatasPage.elements.instansiSelect().find('option').eq(1).then(($o) => {
-          PengaturanBatasPage.elements.instansiSelect().select($o.val());
+          PengaturanBatasPage.pilihInstansi($o.val());
         });
         PengaturanBatasPage.elements.batasSelect().select('juz');
         PengaturanBatasPage.elements.metodeSelect().select('per_juz');
@@ -191,28 +216,46 @@ describe('Pengaturan Kesiswaan - Batas Tahfidz', () => {
     });
 
     it('TC-IMT-021 : Gagal simpan karena koneksi', () => {
-      // AMAN: SEMUA request komponen form digagalkan (forceNetworkError) sebelum klik
-      // Simpan, jadi tidak ada yang sampai ke server -> tidak ada pengaturan baru.
+      // AMAN (berlapis): browser offline DAN semua request komponen form digagalkan
+      // (forceNetworkError) sebelum klik Simpan -> tidak ada yang sampai ke server.
       // Bagian "klik Simpan berkali-kali" butuh simpan sungguhan (permanen) -> tidak diuji.
-      const X = fx.instansi.tanpaPengaturan.nama;
       PengaturanBatasPage.visit().bukaTambah();
-      PengaturanBatasPage.elements.instansiSelect().select(X);
+      instansiTersedia().then((office) => {
+        PengaturanBatasPage.pilihInstansi(office);
+      });
       PengaturanBatasPage.elements.batasSelect().select('juz');
       PengaturanBatasPage.elements.metodeSelect().select('per_juz');
       cy.intercept('POST', `**/livewire/message/${fx.livewire.pengaturan}`, { forceNetworkError: true }).as('lwSimpanPutus');
-      PengaturanBatasPage.elements.btnSimpan().click();
-      cy.wait('@lwSimpanPutus');
+      offline(true);
+      // Fix a9e3c84c: selama offline Simpan nonaktif (x-buttons.submit wire:offline.attr="disabled")
+      // dan pesan gagal simpan tampil di modal -> klik tidak mungkin, double submit tercegah.
+      PengaturanBatasPage.elements.btnSimpan().should('be.disabled');
       cy.contains(M, fx.pengaturan.pesanGagalSimpan).should('be.visible');
       PengaturanBatasPage.elements.batasSelect().should('have.value', 'juz');
       PengaturanBatasPage.elements.metodeSelect().should('have.value', 'per_juz');
+      offline(false);
+      PengaturanBatasPage.batal();
     });
 
     it('TC-IMT-022 : Sesi berakhir saat menyimpan', () => {
-      // Sesi berakhir = cookie sesi dihapus saat form terbuka. Server menolak request
-      // (419 CSRF / tanpa sesi) -> tidak ada yang tersimpan.
+      // Sesi berakhir = LOGOUT sungguhan di server (setara "logout di tab lain") saat form terbuka.
+      // INSIDEN run 7 Okt 2026: versi lama memakai cy.clearCookies(), sesi ternyata tetap hidup dan
+      // Simpan MENYIMPAN pengaturan permanen. Sekarang sesi dipastikan mati DULU (GET /home
+      // dialihkan ke login) sebelum Simpan diklik; kalau tidak mati, test berhenti sebelum klik.
       PengaturanBatasPage.visit().bukaTambah();
-      PengaturanBatasPage.elements.instansiSelect().select(fx.instansi.tanpaPengaturan.nama);
-      cy.clearCookies();
+      instansiTersedia().then((office) => {
+        PengaturanBatasPage.pilihInstansi(office);
+      });
+      cy.window().then((w) => {
+        const meta = w.document.querySelector('meta[name="csrf-token"]');
+        const token = w.livewire_token || (meta && meta.content);
+        expect(token, 'token CSRF halaman').to.be.a('string').and.not.be.empty;
+        cy.request({ method: 'POST', url: '/logout', form: true, body: { _token: token }, failOnStatusCode: false });
+      });
+      cy.request({ url: '/home', followRedirect: false, failOnStatusCode: false }).then((res) => {
+        expect(res.status, 'sesi sudah berakhir (redirect)').to.be.oneOf([301, 302]);
+        expect(res.redirectedToUrl || '', 'diarahkan ke login').to.contain(Cypress.expose('appLogin'));
+      });
       PengaturanBatasPage.elements.btnSimpan().click();
       cy.location('pathname', { timeout: 20000 }).should('eq', Cypress.expose('appLogin'));
       cy.contains(fx.pengaturan.pesanSesiBerakhir).should('be.visible');
@@ -261,7 +304,13 @@ describe('Pengaturan Kesiswaan - Batas Tahfidz', () => {
       pulihkanPengaturan(fx);
     });
 
-    it('TC-IMT-027 : Instansi tanpa pengaturan memakai nilai bawaan sistem (Halaman)', () => {
+    it('TC-IMT-027 : Instansi tanpa pengaturan memakai nilai bawaan sistem (Halaman)', function () {
+      const X = fx.instansi.tanpaPengaturan.nama;
+      PengaturanBatasPage.visit();
+      cy.get('table.rappasoft-datatable').then(($t) => {
+        perluData(this, !P.barisData($t).some((r) => r[0] === X),
+          `${X} sudah punya pengaturan (insiden TC-IMT-022 run 7 Okt 2026) — hapus barisnya lewat DB`);
+      });
       ProgramTahfidzPage.visit().bukaTambah().pilihInstansi(fx.instansi.tanpaPengaturan.nama).pilihJenis('juz');
       ProgramTahfidzPage.nilaiBatas().should('eq', 'halaman');
       ProgramTahfidzPage.batal();
@@ -298,7 +347,7 @@ describe('Pengaturan Kesiswaan - Batas Tahfidz', () => {
           Y = { ...pilih, tanggal: new Date().toISOString().slice(0, 10) };
           // Catat SEBELUM simpan: bila run terputus sesudah simpan, baris tetap terlacak.
           cy.writeFile(STATE, { ...Y, _catatan: 'Pengaturan Batas Tahfidz dibuat TC-IMT-016 (keputusan D1). Hapus baris tahfidz_settings instansi ini lewat DB sesudah testing.' });
-          PengaturanBatasPage.elements.instansiSelect().select(Y.office);
+          PengaturanBatasPage.pilihInstansi(Y.office);
         });
         PengaturanBatasPage.elements.batasSelect().select('ayat');
         PengaturanBatasPage.elements.metodeSelect().select('per_juz');
@@ -325,7 +374,7 @@ describe('Pengaturan Kesiswaan - Batas Tahfidz', () => {
       PengaturanBatasPage.elements.instansiSelect().then(($s) => {
         $s.append(Cypress.$('<option>').val(Y.office).text(Y.nama));
       });
-      PengaturanBatasPage.elements.instansiSelect().select(Y.office);
+      PengaturanBatasPage.pilihInstansi(Y.office);
       PengaturanBatasPage.elements.batasSelect().select('juz');
       cy.aliasLivewireMethod(fx.livewire.pengaturan, 'submit_tahfidz_limit', 'lwSimpanDobel');
       PengaturanBatasPage.elements.btnSimpan().click();

@@ -33,7 +33,9 @@ class PengaturanBatasPage {
 
     modal: () => cy.get(M, { timeout: 15000 }),
     judulModal: () => cy.get(`${M} .modal-header h2`),
-    instansiSelect: () => cy.get(`${M} select[wire\\:model\\.defer="office"]`),
+    // Sejak deploy a9e3c84c (7 Okt 2026, fix BUG-014) select Instansi = wire:model (live),
+    // sebelumnya wire:model.defer. Keduanya diterima.
+    instansiSelect: () => cy.get(`${M} select[wire\\:model="office"], ${M} select[wire\\:model\\.defer="office"]`),
     instansiDisabled: () => cy.get(`${M} input[type="text"][disabled]`),
     batasSelect: () => cy.get(`${M} select[wire\\:model\\.defer="tahfidz_limit"]`),
     metodeSelect: () => cy.get(`${M} select[wire\\:model\\.defer="page_numbering_method"]`),
@@ -102,6 +104,13 @@ class PengaturanBatasPage {
     cy.livewireIdle();
     cy.modalStabil('#modal-tahfidz-limit');
     this.elements.judulModal().should('have.text', 'Edit Batas Tahfidz');
+    return this;
+  }
+
+  /** Pilih Instansi di form Tambah. wire:model live -> tunggu request & morph selesai. */
+  pilihInstansi(nilai) {
+    this.elements.instansiSelect().select(nilai);
+    cy.livewireIdle();
     return this;
   }
 

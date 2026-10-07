@@ -51,6 +51,10 @@ Batasi program **di dalam** agregat, bukan di closure eager load. Contoh (pilih 
    ```
    lalu muat riwayatnya berdasarkan `latest_progress_id` (juga dipakai `memberIdsAtUnit`).
 
+## Retest 7 Oktober 2026
+
+**PASS → Fixed.** Staging `a9e3c84c` (cherry-pick `2b820ac4`, deploy 7 Okt 2026), Cypress Chrome. TC-IMT-095, TC-IMT-098: kolom Batas Tahfidz, Pencapaian, Terakhir Update diambil dari riwayat terakhir di program itu (relasi `program_tahfidz_progress`).
+
 <!-- AUTO:START -->
 ## Evidence otomatis (2026-10-06)
 

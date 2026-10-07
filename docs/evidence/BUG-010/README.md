@@ -21,6 +21,10 @@ Riwayat lama berubah menjadi `Halaman 582`.
 ## Saran fix
 Simpan metode penomoran (atau label capaian) di riwayat saat dibuat (mis. kolom `page_numbering_method` di `tahfidz_progress`) dan pakai itu ketika memformat; riwayat lama tanpa nilai = metode saat ini.
 
+## Retest 7 Oktober 2026
+
+**Won't Fix (keputusan dev 7 Okt 2026, known limitation).** Label halaman riwayat lama mengikuti metode instansi saat ini; nomor halaman tersimpan dan persentase tidak berubah. Fix butuh migrasi, ditunda. TC-IMT-105 di-skip (`it.skip`), assertion PRD tetap disimpan.
+
 <!-- AUTO:START -->
 ## Evidence otomatis (2026-10-06)
 

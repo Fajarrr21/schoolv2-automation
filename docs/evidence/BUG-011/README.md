@@ -21,6 +21,10 @@ Batas berubah ke **Ayat** (default instansi) dan keterangan tidak tampil.
 ## Saran fix
 Pakai `TahfidzUnit::LIMIT_SURAH` bila nilai lama tidak tersedia untuk Jenis Surah (sesuai PRD), dan render flash `info` (atau keterangan di bawah field Batas Tahfidz).
 
+## Retest 7 Oktober 2026
+
+**PASS → Fixed.** Staging `a9e3c84c` (cherry-pick `2b820ac4`, deploy 7 Okt 2026), Cypress Chrome. TC-IMT-032: Jenis Juz + Batas Halaman lalu ganti ke Jenis Surah → Batas = Surah, keterangan "Pilihan Batas Tahfidz disesuaikan karena Jenis Tahfidz diubah." tampil di bawah field.
+
 <!-- AUTO:START -->
 ## Evidence otomatis (2026-10-06)
 

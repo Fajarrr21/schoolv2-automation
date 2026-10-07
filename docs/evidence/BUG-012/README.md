@@ -20,6 +20,10 @@ Card hanya berisi instansi, nama, tingkat/kelas, Nama Program, Jenis, dan target
 ## Saran fix
 Tambah baris `Batas Tahfidz: {{ TahfidzUnit::unitLabel($tahfidz->tahfidz_limit) }}` (badge seperti di Detail Program).
 
+## Retest 7 Oktober 2026
+
+**PASS → Fixed.** Staging `a9e3c84c` (cherry-pick `2b820ac4`, deploy 7 Okt 2026), Cypress Chrome. TC-IMT-071: card Data Siswa menampilkan "Batas Tahfidz: Halaman".
+
 <!-- AUTO:START -->
 ## Evidence otomatis (2026-10-06)
 

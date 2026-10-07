@@ -51,6 +51,10 @@ Kondisinya hanya "ada ayat terpilih", bukan "ada ayat terpilih yang akan terbuan
 Hitung dulu ayat terpilih yang akan keluar dari cakupan bila pilihan baru diterapkan (susun ulang
 cakupan dengan `unit_choice` sementara), lalu set `unit_pending` hanya bila hasilnya tidak kosong.
 
+## Retest 7 Oktober 2026
+
+**PASS → Fixed.** Staging `a9e3c84c` (cherry-pick `2b820ac4`, deploy 7 Okt 2026), Cypress Chrome. TC-025B (TC baru): melepas Juz 30 yang tidak punya ayat terpilih langsung terlepas tanpa popup; Juz 16 dan ayat Taha tetap.
+
 <!-- AUTO:START -->
 ## Evidence otomatis (2026-10-06)
 

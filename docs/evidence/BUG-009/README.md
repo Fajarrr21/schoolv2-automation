@@ -32,6 +32,10 @@ Pakai urutan (activity_date, id) secara konsisten di kedua fungsi, mis. pada `ca
 ```
 dan pada `recalculateProgressAfter` hanya riwayat dengan (activity_date, id) lebih besar dari riwayat yang berubah.
 
+## Retest 7 Oktober 2026
+
+**PASS → Fixed.** Staging `a9e3c84c` (cherry-pick `2b820ac4`, deploy 7 Okt 2026), Cypress Chrome. TC-IMT-098: dua riwayat di tanggal yang sama — riwayat pertama tetap 60% (3 dari 5 juz), riwayat kedua 80%.
+
 <!-- AUTO:START -->
 ## Evidence otomatis (2026-10-06)
 

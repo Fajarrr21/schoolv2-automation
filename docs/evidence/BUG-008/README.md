@@ -33,6 +33,10 @@ $value = $this->filters['batas_' . $step] ?? null;
 ```
 `memberIdsAtUnit()` juga terdampak BUG-007 (relasi `latest_tahfidz_progress`), perbaiki sekalian.
 
+## Retest 7 Oktober 2026
+
+**PASS → Fixed.** Staging `a9e3c84c` (cherry-pick `2b820ac4`, deploy 7 Okt 2026), Cypress Chrome. TC-IMT-057..064: filter membalas 200, bertingkat sampai Ayat, filter tanpa hasil/kosongkan benar, export ikut filter.
+
 <!-- AUTO:START -->
 ## Evidence otomatis (2026-10-06)
 

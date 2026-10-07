@@ -1,5 +1,9 @@
 # BUG-005
 
+## Retest 7 Oktober 2026
+
+**PASS → Fixed.** Staging `a9e3c84c` (cherry-pick `2b820ac4`, deploy 7 Okt 2026), Cypress Chrome. TC-081..086, TC-090, TC-091: penulisan list & export = "QS. Maryam ayat 1-5, QS. Taha ayat 1-3, 7, 10".
+
 <!-- AUTO:START -->
 ## Evidence otomatis (2026-10-06)
 

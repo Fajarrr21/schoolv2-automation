@@ -106,6 +106,15 @@ class TahfidzDetailPage {
       .then(($l) => Cypress.$.makeArray($l).map((el) => el.textContent.trim()));
   }
 
+  /** Assert label filter dengan retry (morph Livewire bisa menyusul sesudah request selesai). */
+  assertLabelFilter(cek) {
+    this.pastikanFilterTerbuka();
+    cy.get('ul.dropdown-menu.show[role="menu"]').should(($u) => {
+      cek(Cypress.$.makeArray($u.find('label')).map((el) => el.textContent.trim()));
+    });
+    return this;
+  }
+
   /**
    * Pilih nilai filter Batas Tahfidz. Request member-datatable WAJIB 200:
    * element analysis #3 menemukan HTTP 500 intermiten (calon bug) — dibiarkan

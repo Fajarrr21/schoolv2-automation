@@ -1,5 +1,9 @@
 # BUG-004
 
+## Retest 7 Oktober 2026
+
+**PASS → Fixed.** Staging `a9e3c84c` (cherry-pick `2b820ac4`, deploy 7 Okt 2026), Cypress Chrome. TC-031: Daftar Ayat bertambah otomatis saat digulir ke bawah (IntersectionObserver); tombol "Muat ayat berikutnya" tetap ada sebagai cadangan.
+
 <!-- AUTO:START -->
 ## Evidence otomatis (2026-10-06)
 

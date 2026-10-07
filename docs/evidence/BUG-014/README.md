@@ -19,6 +19,10 @@ Simpan aktif. Validasi server memakai pesan bawaan Laravel (bukan teks PRD).
 ## Saran fix
 `:disabled="!$office"` pada tombol Simpan dan pesan validasi `required` = "Lengkapi seluruh field yang wajib diisi."
 
+## Retest 7 Oktober 2026
+
+**PASS → Fixed.** Staging `a9e3c84c` (cherry-pick `2b820ac4`, deploy 7 Okt 2026), Cypress Chrome. TC-IMT-017: tombol Simpan nonaktif sampai Instansi dipilih (select Instansi sekarang `wire:model` live).
+
 <!-- AUTO:START -->
 ## Evidence otomatis (2026-10-06)
 

@@ -113,7 +113,8 @@ Fixture mencatat bug yang diketahui sebagai `bug: { ... }` dengan id `BUG-###`. 
 - Sumber kebenaran = `bugs.csv` (di-commit). `Bug_Tracker_QA_CARDS.xlsx` = hasil generate (`python scripts/build_bug_tracker.py`), jangan diedit manual.
 - Tambah bug: `/bug <deskripsi>` atau append `bugs.csv` lalu regenerate. ID mulai `BUG-001`, 3 digit.
 - Kolom: `Bug ID, Tiket, Module, Title, Steps to Reproduce, Expected Result, Actual Result, Severity, Priority, Reporter, Status, Date Found, Video Evidence, Screenshot Evidence`.
-- Tiket: `Tiket 1 - Capaian Multi Select` / `Tiket 2 - Improvement Batas Tahfidz` / `Di luar tiket`. xlsx berisi satu sheet per tiket + sheet `Semua Bug`.
+- Tiket: `Tiket 1 - Capaian Multi Select` / `Tiket 2 - Improvement Batas Tahfidz` / `Di luar tiket`. xlsx berisi satu sheet per tiket + sheet `Semua Bug`. Generator yang sama menulis `docs/evidence/README.md` (indeks per tiket, urut Priority, dengan TC dari fixture `bug.*.tc`) — jangan diedit manual.
+- Priority = urutan pengerjaan `Pxx` yang terus naik lintas tiket (bukan turunan Severity); bug paling berdampak didahulukan.
 - Severity High/Medium/Low. Steps bernomor mulai `1. Login sebagai admin`. Reporter default `Fajar Ardiansyah`, Status default `Open`, Date Found `DD Bulan YYYY`.
 - **Evidence WAJIB** (permintaan user): screenshot (bukan video — berat) di `docs/evidence/BUG-xxx/` (DI-COMMIT; `cypress/screenshots` git-ignored & dihapus tiap run) + `README.md` berisi langkah, expected vs actual, lokasi source, saran fix. Kolom `Screenshot Evidence` di `bugs.csv` berisi path relatif. Otomatis: daftarkan TC di fixture `bug.BUG-xxx.tc`, lalu `python scripts/collect_evidence.py <log-run>` (salin screenshot gagal + kutip assertion dari log). Bug tanpa TC (mis. temuan element analysis) → README manual.
 - Run cleanup pakai `--config trashAssetsBeforeRuns=false` supaya screenshot run sebelumnya tidak terhapus sebelum dikumpulkan.

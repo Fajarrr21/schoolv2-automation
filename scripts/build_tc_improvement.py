@@ -169,6 +169,23 @@ HASIL[4] = ("FAIL", f"{_RH}: FAIL -> BUG-016 (aksi Edit tampil untuk akun Lihat 
 HASIL[5] = ("FAIL", f"{_RH}: FAIL -> BUG-016 (tombol Tambah tampil untuk akun Lihat + Ubah).")
 SPEC[19] = "Pengaturan/Kesiswaan/batas-tahfidz/hakakses.cy.js"
 HASIL[19] = ("PASS", f"{_RH}: PASS dengan akun QA BT Semua (instansinya hanya SMP Digital Indonesia+ yang sudah berpengaturan): Tambah nonaktif + 'Seluruh instansi sudah memiliki pengaturan Batas Tahfidz.'")
+# ===== RETEST 7 Okt 2026 (staging a9e3c84c = fix dev 2b820ac4) — run penuh cy:batas + ulang =====
+_R7 = "Retest Cypress 7 Okt 2026 (staging a9e3c84c, Chrome)"
+for _n in list(HASIL):
+    if HASIL[_n][0] == "PASS":
+        HASIL[_n] = ("PASS", HASIL[_n][1] + f" {_R7}: PASS.")
+for _n, _b in {2: "BUG-016 (celah URL)", 17: "BUG-014", 21: "BUG-015 (gagal simpan)", 32: "BUG-011", 57: "BUG-008", 58: "BUG-008", 59: "BUG-008",
+               60: "BUG-008", 61: "BUG-008", 62: "BUG-013", 63: "BUG-008", 64: "BUG-008", 71: "BUG-012", 95: "BUG-007", 98: "BUG-007 & BUG-009"}.items():
+    HASIL[_n] = ("PASS", f"{_R7}: PASS -> {_b} FIXED.")
+HASIL[21] = ("PASS", f"{_R7}: PASS -> BUG-015 bagian gagal simpan FIXED (offline: pesan di modal, Simpan nonaktif, isian tetap).")
+HASIL[12] = ("FAIL", f"{_R7}: FAIL -> BUG-015 (Partially Fixed). Offline: pesan + Coba Lagi tampil; setelah koneksi pulih banner & Coba Lagi hilang, langkah 'pulihkan koneksi lalu klik Coba Lagi' tidak bisa. Evidence docs/evidence/BUG-015/RETEST-2026-10-07_TC-IMT-012.png")
+HASIL[22] = ("FAIL", f"{_R7}: FAIL -> BUG-015 (tidak diubah, keputusan dev): redirect login benar, teks 'Sesi Anda Berakhir' bukan versi PRD.")
+for _n in (3, 4, 5):
+    HASIL[_n] = ("FAIL", f"{_R7}: FAIL -> BUG-016 (Partially Fixed): aksi Lihat/Tambah/Ubah tidak dibangun (keputusan dev: fitur baru). Evidence docs/evidence/BUG-016/RETEST-2026-10-07_TC-IMT-00{_n}.png")
+HASIL[6] = ("FAIL", "BUG-016 (Partially Fixed): form Jenis Pengguna tetap checkbox on/off tanpa aksi (keputusan dev 7 Okt 2026: fitur baru, bukan bug).")
+HASIL[105] = ("Skip (Won't Fix)", "BUG-010 Won't Fix (keputusan dev 7 Okt 2026, known limitation; fix butuh migrasi). Spec it.skip, assertion PRD disimpan.")
+HASIL[27] = ("Blocked", "Run 7 Okt 2026: SMP Islam Terpadu Purwokerto kini punya pengaturan (insiden TC-IMT-022 versi lama menyimpan pengaturan) -> hapus barisnya lewat DB (docs/test-data/pengaturan-baru.json). Sebelumnya PASS 6 Okt.")
+HASIL[16] = ("PASS", HASIL[16][1].split(" Retest")[0] + " Run 7 Okt: di-skip otomatis (pengaturan dari run 6 Okt masih ada, menunggu dihapus lewat DB).")
 HASIL[11] = ("Blocked", f"{RUN}: data staging hanya <= 10 pengaturan; pagination butuh > 10 baris. D1 hanya mengizinkan instansi QA, jadi tetap Blocked.")
 # Uji manual 6 Okt 2026 (dua tab admin) + cek read-only Cypress sesudahnya.
 MANUAL[38] = ("Uji manual 6 Okt 2026 (dua tab admin, staging 88e43584, Program F #255, Batas Halaman). "

@@ -2,5 +2,18 @@
   "nama": "Digital International School",
   "office": "69535bc689994b001aba0378",
   "tanggal": "2026-10-06",
-  "_catatan": "Pengaturan Batas Tahfidz dibuat TC-IMT-016 (keputusan D1). Hapus baris tahfidz_settings instansi ini lewat DB sesudah testing."
+  "_catatan": "Pengaturan Batas Tahfidz dibuat TC-IMT-016 (keputusan D1). Hapus baris tahfidz_settings instansi ini lewat DB sesudah testing.",
+  "hapusLewatDb": [
+    {
+      "nama": "Digital International School",
+      "office": "69535bc689994b001aba0378",
+      "dibuat": "6 Okt 2026",
+      "oleh": "TC-IMT-016 (disengaja, keputusan D1)"
+    },
+    {
+      "nama": "SMP Islam Terpadu Purwokerto",
+      "dibuat": "7 Okt 2026 ~09:45",
+      "oleh": "TC-IMT-022 (TIDAK disengaja: cy.clearCookies tidak mengakhiri sesi, Simpan berhasil). Nilai: Halaman / Nomor halaman mushaf. TC-IMT-022 sudah diperbaiki (logout server + cek sesi mati sebelum klik)."
+    }
+  ]
 }

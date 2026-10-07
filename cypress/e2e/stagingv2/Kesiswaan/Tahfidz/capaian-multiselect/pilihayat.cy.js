@@ -113,6 +113,18 @@ describe('Tahfidz - Capaian Multi Select - Pilih Ayat', () => {
       Form.elements.stepOpsi('juz', 16).should('be.checked');
     });
 
+    it('TC-025B : Melepas centang Juz tanpa ayat terpilih di bawahnya tidak menampilkan popup', () => {
+      // BUG-006 (PRD Tambah Riwayat: popup hanya bila sudah ada ayat terpilih DI BAWAH juz/halaman
+      // yang dilepas). Ayat terpilih hanya Taha (Juz 16); Juz 30 dilepas -> langsung terlepas.
+      formJuzDenganAyat();
+      Form.klikStep('juz', 30);
+      Form.elements.popup().should('not.exist');
+      Form.nilaiChip('juz').should('deep.eq', [16]);
+      cy.get('@ayatTaha').then((k) => {
+        Form.assertTerpilih([k]);
+      });
+    });
+
     it('TC-027 : Popup Ganti Pilihan > Ganti melepas juz beserta halaman, surat, dan ayat di bawahnya', () => {
       formJuzDenganAyat();
       Form.klikStep('juz', 16);

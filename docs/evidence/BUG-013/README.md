@@ -19,6 +19,10 @@ Filter Juz tetap tampil (label `['Juz']`), Halaman belum muncul.
 ## Saran fix
 Dalam loop: bila `count($options) === 1`, isi `$chosen[$step]` dengan nilai satu-satunya dan `continue` tanpa menambah filter. `selectedUnitKey()` juga perlu mengisi tingkat yang dilewati.
 
+## Retest 7 Oktober 2026
+
+**PASS → Fixed.** Staging `a9e3c84c` (cherry-pick `2b820ac4`, deploy 7 Okt 2026), Cypress Chrome. TC-IMT-062: Program F (target hanya Juz 30) — tingkat Juz dilewati, filter langsung Halaman.
+
 <!-- AUTO:START -->
 ## Evidence otomatis (2026-10-06)
 

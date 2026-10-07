@@ -24,6 +24,27 @@ Item Kesiswaan Batas Tahfidz punya aksi **Semua, Lihat, Tambah, Ubah**. Centang 
 ## Saran fix
 Tambah aksi (lihat/tambah/ubah) pada item `student-affairs-tahfidz-limit` di konfigurasi hak akses (Main System), cek di view (`@if (MiddlewareMenuAccess::can...('add'/'edit'))`) dan di method Livewire (`submit_tahfidz_limit`, `open_modal_add`, `set_edit_tahfidz_limit`), serta jaga route dengan izin sub-modul yang sama dengan sidebar.
 
+## Retest 7 Oktober 2026
+
+**SEBAGIAN → Partially Fixed.** Staging `a9e3c84c` (cherry-pick `2b820ac4`, deploy 7 Okt 2026), Cypress Chrome.
+
+| TC | Hasil | Keterangan |
+|---|---|---|
+| TC-IMT-002 Akses tanpa izin | **PASS** | Akun "QA BT Tanpa" tidak melihat submenu DAN tidak bisa membuka `/setting/student-affairs/tahfidz-limit` lewat URL (route kini `permission:setting,student-affairs-tahfidz-limit`). |
+| TC-IMT-003 hanya Lihat | **FAIL** | Tombol Tambah Batas Tahfidz tetap tampil. |
+| TC-IMT-004 Lihat + Tambah | **FAIL** | Aksi Edit tetap tampil. |
+| TC-IMT-005 Lihat + Ubah | **FAIL** | Tombol Tambah tetap tampil. |
+| TC-IMT-006 Form Jenis Pengguna | **FAIL** | Masih checkbox on/off tanpa aksi. |
+
+**Keputusan dev 7 Okt 2026:** aksi Lihat/Tambah/Ubah tidak dibangun karena V2 tidak punya hak akses per aksi di menu mana pun (fitur baru, bukan bug). Sisa TC-003..006 diperkirakan tetap merah sampai fiturnya dibuat.
+
+**Langkah (sisa gagal):** login sebagai "QA BT Lihat" (jenis pengguna dengan Batas Tahfidz dicentang) > Pengaturan > Kesiswaan > Batas Tahfidz.
+**Actual:** tombol Tambah Batas Tahfidz dan aksi Edit tersedia (sama dengan akun "QA BT Semua").
+
+![TC-IMT-003 retest](RETEST-2026-10-07_TC-IMT-003.png)
+![TC-IMT-004 retest](RETEST-2026-10-07_TC-IMT-004.png)
+![TC-IMT-005 retest](RETEST-2026-10-07_TC-IMT-005.png)
+
 <!-- AUTO:START -->
 ## Evidence otomatis (2026-10-06)
 

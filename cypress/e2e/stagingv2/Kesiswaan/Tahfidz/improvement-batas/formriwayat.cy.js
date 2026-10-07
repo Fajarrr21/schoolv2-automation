@@ -50,7 +50,8 @@ describe('Tahfidz - Form Tambah Riwayat (Batas Tahfidz)', () => {
   /** Nama langkah dropdown yang tampil, urut DOM (wire:key "step-juz-3" -> "juz"). */
   const langkahTampil = () =>
     cy.get(M).then(($m) =>
-      Cypress.$.makeArray($m.find('[wire\\:key^="step-"]')).map((el) => el.getAttribute('wire:key').split('-')[1]),
+      // Sejak deploy a9e3c84c opsi dropdown juga ber-wire:key "step-option-..." -> dikecualikan.
+      Cypress.$.makeArray($m.find('[wire\\:key^="step-"]:not([wire\\:key^="step-option-"])')).map((el) => el.getAttribute('wire:key').split('-')[1]),
     );
   /** Label opsi dropdown sebuah langkah, urut DOM. */
   const labelOpsi = (step) =>

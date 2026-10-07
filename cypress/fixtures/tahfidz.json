@@ -231,7 +231,9 @@
     },
     "BUG-006": {
       "judul": "Popup Ganti Pilihan muncul walau tidak ada ayat terpilih yang akan dihapus",
-      "tc": [],
+      "tc": [
+        "TC-025B"
+      ],
       "_catatan": "Keputusan Q5; evidence dari element analysis #2"
     }
   },

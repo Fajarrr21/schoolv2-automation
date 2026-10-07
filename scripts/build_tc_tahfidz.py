@@ -175,11 +175,18 @@ STATUS[31] = ("FAIL", "BUG-004 - " + _R2 + " Evidence: docs/evidence/BUG-004/")
 for _n in [81, 82, 83, 84, 85, 86, 90, 91]:
     STATUS[_n] = ("FAIL", "BUG-005 - " + _R2 + " V2 '{surat} Ayat {n}' vs PRD 'QS. {surat} ayat {n}'. Evidence: docs/evidence/BUG-005/")
 STATUS[87] = ("Tidak diotomasi", "Keputusan user 6 Okt 2026 (D5): skip / N/A. Butuh riwayat lama (sebelum rilis) yang tidak ada di staging dan tidak bisa dibuat lewat UI.")
+# ===== RETEST 7 OKT 2026 (staging a9e3c84c, fix dev) =====
+_R3 = "Retest Cypress 7 Okt 2026 (staging a9e3c84c, Chrome): PASS."
+STATUS[26] = ("PASS", "BUG-002 FIXED. " + _R3)
+STATUS[31] = ("PASS", "BUG-004 FIXED (dimuat otomatis saat digulir). " + _R3)
+for _n in [81, 82, 83, 84, 85, 86, 90, 91]:
+    STATUS[_n] = ("PASS", "BUG-005 FIXED (format 'QS. {surat} ayat {ayat}'). " + _R3)
+STATUS[25] = ("PASS", _R3 + " + TC-025B (BUG-006: lepas juz tanpa ayat terpilih -> tanpa popup) PASS, BUG-006 FIXED.")
+
 # ===== KEPUTUSAN DEV (6 Okt 2026) =====
 _D6 = "Keputusan dev D6 (6 Okt 2026): cukup unit test. State hanya muncul bila server gagal menyusun daftar satuan (exception di buildUnitOptions); memblokir request dari browser tidak memicunya."
 STATUS[33] = ("Tidak diotomasi", _D6)
 STATUS[34] = ("Tidak diotomasi", _D6 + " (lanjutan TC-033)")
-STATUS[79] = ("PASS", "Uji manual 6 Okt 2026 (dua tab admin, staging 88e43584): PASS. Simpan di tab B ditolak dan ayat yang sudah dicatat tab A tampil terkunci. Teks toast tidak direkam (deploy 88e43584 mengubah teks pesan konflik; teks baru belum dicatat). Riwayat uji QA-manual-079-B (Program #247) sudah dihapus (cleanup Cypress 6 Okt 2026: 1 passing).")
 STATUS[35] = ("Tidak diotomasi", "Keputusan dev D7 (6 Okt 2026): N/A. Opsi tiap langkah diturunkan dari pilihan sebelumnya dan satuan terpakai tetap tampil terkunci, jadi daftar kosong tidak tercapai lewat UI (jaring pengaman saja).")
 
 

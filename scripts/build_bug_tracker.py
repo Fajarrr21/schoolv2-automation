@@ -29,6 +29,7 @@ SEV_FILL = {
 STATUS_COLOR = {
     "Open": "C00000",     # merah
     "In Progress": "BF8F00",  # oranye gelap
+    "Partially Fixed": "BF8F00",  # oranye gelap: sebagian sudah diperbaiki
     "Fixed": "548235",    # hijau
     "Closed": "548235",
     "Won't Fix": "808080",
@@ -142,3 +143,52 @@ wb.save(OUT)
 print(f"OK -> {OUT} ({len(data)} bugs)")
 for ws in wb.worksheets:
     print(f"  {ws.title}: {ws.max_row - HEADER_ROW} bug")
+
+
+# --- docs/evidence/README.md: indeks evidence per tiket (ikut di-generate) ---
+import json
+import os
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+TC_MAP = {}
+for fx in ("tahfidz.json", "batas.json"):
+    path = os.path.join(ROOT, "cypress", "fixtures", fx)
+    if os.path.exists(path):
+        for bug_id, info in (json.load(open(path, encoding="utf-8")).get("bug") or {}).items():
+            if bug_id.startswith("BUG-"):
+                TC_MAP[bug_id] = info.get("tc") or []
+
+SEV_ORDER = {"High": 0, "Medium": 1, "Low": 2}
+idx = [
+    "# Evidence Bug — QA CARDS School V2 (staging)",
+    "",
+    "> Di-generate oleh `python scripts/build_bug_tracker.py` dari `bugs.csv` — jangan diedit manual.",
+    "> Tiap folder `BUG-xxx/` berisi `README.md` (langkah, expected vs actual, lokasi source, saran fix) + screenshot.",
+    "",
+]
+for tiket in tiket_list:
+    rows = sorted((r for r in data if r[1] == tiket), key=lambda r: r[COL["Priority"] - 1])
+    if not rows:
+        continue
+    terbuka = sum(1 for r in rows if r[COL["Status"] - 1] not in ("Fixed", "Closed", "Won't Fix"))
+    sev = {s: sum(1 for r in rows if r[COL["Severity"] - 1] == s) for s in SEV_ORDER}
+    idx += [
+        f"## {tiket}",
+        "",
+        f"{len(rows)} bug · {terbuka} belum selesai · High {sev['High']} / Medium {sev['Medium']} / Low {sev['Low']}",
+        "",
+        "| Prioritas | Bug | Severity | Status | Judul | TC terkait | Evidence |",
+        "|---|---|---|---|---|---|---|",
+    ]
+    for r in rows:
+        bug = r[0]
+        tc = ", ".join(TC_MAP.get(bug, [])) or "-"
+        judul = r[COL["Title"] - 1].replace("|", "/")
+        idx.append(
+            f"| {r[COL['Priority'] - 1]} | {bug} | {r[COL['Severity'] - 1]} | {r[COL['Status'] - 1]} "
+            f"| {judul} | {tc} | [{bug}/]({bug}/README.md) |"
+        )
+    idx.append("")
+evid = os.path.join(ROOT, "docs", "evidence", "README.md")
+open(evid, "w", encoding="utf-8").write("\n".join(idx))
+print(f"OK -> docs/evidence/README.md (indeks per tiket)")

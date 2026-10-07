@@ -36,6 +36,31 @@ Simulasi di test (tidak ada data yang tersimpan):
 - Tangani kegagalan request Livewire di halaman ini (mis. hook `Livewire.hook('message.failed', ...)` / `onError`) untuk menampilkan pesan gagal muat + tombol Coba Lagi (`$refresh`), dan pesan gagal simpan di modal.
 - Samakan teks sesi berakhir dengan PRD (atau perbarui PRD bila teks global dipertahankan).
 
+## Retest 7 Oktober 2026
+
+**SEBAGIAN → Partially Fixed.** Staging `a9e3c84c` (cherry-pick `2b820ac4`, deploy 7 Okt 2026), Cypress Chrome.
+
+| TC | Hasil | Keterangan |
+|---|---|---|
+| TC-IMT-021 Gagal simpan karena koneksi | **PASS** | Saat browser offline: pesan "Gagal menyimpan, periksa koneksi Anda dan coba lagi." tampil di modal, Simpan nonaktif (`wire:offline.attr="disabled"`), isian tetap. |
+| TC-IMT-012 List gagal dimuat | **FAIL** | Lihat di bawah. |
+| TC-IMT-022 Sesi berakhir | **FAIL (sesuai keputusan dev, tidak diubah)** | Redirect ke `/login` benar; teks tetap "Sesi Anda Berakhir — Untuk keamanan akun, silakan login kembali." |
+
+### Sisa gagal: TC-IMT-012
+**Langkah**
+1. Login sebagai admin > Pengaturan > Kesiswaan > Batas Tahfidz.
+2. Putus koneksi (DevTools > Network > Offline). → Banner "Gagal memuat data, periksa koneksi Anda dan coba lagi." + tombol **Coba Lagi** tampil (sesuai).
+3. Pulihkan koneksi, lalu klik **Coba Lagi** (langkah PRD).
+
+**Expected (PRD):** setelah koneksi pulih, klik Coba Lagi memuat ulang list.
+**Actual:** begitu koneksi pulih, banner beserta tombol Coba Lagi **langsung hilang** (`wire:offline.class.remove="d-none"` pada `tahfidz-limit/index.blade.php`), jadi Coba Lagi tidak pernah bisa diklik saat online; klik Coba Lagi selama offline pun gagal (tidak ada koneksi). List tidak dimuat ulang otomatis.
+**Saran:** tampilkan banner berdasarkan request yang GAGAL (mis. `Livewire.hook('message.failed', ...)` set flag) dan sembunyikan hanya setelah Coba Lagi berhasil, atau muat ulang list otomatis saat event `online`.
+
+![TC-IMT-012 retest](RETEST-2026-10-07_TC-IMT-012.png)
+![TC-IMT-022 retest](RETEST-2026-10-07_TC-IMT-022.png)
+
+Catatan simulasi: offline disimulasikan dengan event `offline`/`online` pada window app (yang didengar Livewire), ditambah `cy.intercept(... forceNetworkError)` pada form agar tidak ada simpan yang lolos.
+
 <!-- AUTO:START -->
 ## Evidence otomatis (2026-10-06)
 
